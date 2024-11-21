@@ -6588,7 +6588,8 @@ KindEditor.plugin('clearhtml', function(K) {
             resultContainer.style.border = '1px solid #ccc';
             resultContainer.style.padding = '10px';
             resultContainer.style.marginTop = '10px';
-            resultContainer.style.backgroundColor = '#f9f9f9';
+            resultContainer.style.backgroundColor = '#333';
+	    resultContainer.style.Color = '#FFF';
             resultContainer.style.whiteSpace = 'pre-wrap';
             resultContainer.style.wordWrap = 'break-word';
             resultContainer.style.fontFamily = 'monospace';
