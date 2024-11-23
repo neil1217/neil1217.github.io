@@ -6388,7 +6388,10 @@ KindEditor.plugin('textclear', function(K) {
 		//html = html.replace(/(</p[^>]*)/g, '>\n');
 		//html = html.replace(/>\s+</g, '><');
 		html = html.replace(/<\/p>/g, '</p>\n');
-		
+		html = html.replace(/<p>活动详情<\/p>/g, '<strong>活动详情<\/strong>');
+		html = html.replace(/<p>活动规则<\/p>/g, '<strong>活动规则<\/strong>');
+		html = html.replace(/<p>活动细则<\/p>/g, '<strong>活动细则<\/strong>');
+		html = html.replace(/<p>规则与条款<\/p>/g, '<strong>规则与条款<\/strong>');
 		//html = html.replace(/\n+/g, '\n');
 		//html = html.replace('<table>', '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="otable">');
 		//console.log(html);
