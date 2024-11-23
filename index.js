@@ -6411,6 +6411,7 @@ KindEditor.plugin('textclear', function(K) {
 		html = html.replace(/^\s+|\s+$/g, '');
 		html = html.replace(/<\/p>/g, '<\/p>\n');
 		html = html.replace(/<\/strong>/g, '<\/strong>\n');
+		html = html.replace(/<a/g, '<a ');
 		//html = html.replace(/<\/p>\s*<p>/g, ' ');		
 		//html = html.replace(/<p><br\/><\/p>/g, '');
 		//html = html.replace(/\n+/g, '\n');
