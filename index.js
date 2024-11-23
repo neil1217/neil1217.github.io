@@ -6365,7 +6365,7 @@ KindEditor.plugin('textclear', function(K) {
         html = html.replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/ig, '');
         html = html.replace(/<o:[^>]+>[\s\S]*?<\/o:[^>]+>/ig, '');
         html = html.replace(/<xml>[\s\S]*?<\/xml>/ig, '');
-		
+	html = html.replace(/<pre>[\s\S]*?<\/xml>/ig, '');	
 
         // 格式化後的 HTML
         html = K.formatHtml(html, {
@@ -6392,6 +6392,8 @@ KindEditor.plugin('textclear', function(K) {
 		html = html.replace(/<p>活动规则<\/p>/g, '<strong>活动规则<\/strong>');
 		html = html.replace(/<p>活动细则<\/p>/g, '<strong>活动细则<\/strong>');
 		html = html.replace(/<p>规则与条款<\/p>/g, '<strong>规则与条款<\/strong>');
+	        html = html.replace(/<p><p><br \/><\/p>/g, '');
+	    
 		//html = html.replace(/\n+/g, '\n');
 		//html = html.replace('<table>', '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="otable">');
 		//console.log(html);
