@@ -6365,8 +6365,9 @@ KindEditor.plugin('textclear', function(K) {
         html = html.replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/ig, '');
         html = html.replace(/<o:[^>]+>[\s\S]*?<\/o:[^>]+>/ig, '');
         html = html.replace(/<xml>[\s\S]*?<\/xml>/ig, '');
-	html = html.replace(/<pre>[\s\S]*?<\/xml>/ig, '');	
-
+		html = html.replace(/<pre>[\s\S]*?<\/xml>/ig, '');
+		html = html.replace(/<table[^>]*>[\s\S]*?<\/table>/g, '');
+		
         // 格式化後的 HTML
         html = K.formatHtml(html, {
             a: ['id', 'class', 'href', 'target', 'name'],
@@ -6387,13 +6388,31 @@ KindEditor.plugin('textclear', function(K) {
         });
 		//html = html.replace(/(</p[^>]*)/g, '>\n');
 		//html = html.replace(/>\s+</g, '><');
-		html = html.replace(/<\/p>/g, '</p>\n');
-		html = html.replace(/<p>活动详情<\/p>/g, '<strong>活动详情<\/strong>');
-		html = html.replace(/<p>活动规则<\/p>/g, '<strong>活动规则<\/strong>');
-		html = html.replace(/<p>活动细则<\/p>/g, '<strong>活动细则<\/strong>');
-		html = html.replace(/<p>规则与条款<\/p>/g, '<strong>规则与条款<\/strong>');
-	        html = html.replace(/<p><p><br \/><\/p>/g, '');
-	    
+		//html = html.replace(/<\/p>/g, '</p>\n');
+		
+		
+		html = html.replace(/&nbsp;/g, '');
+		html = html.replace(/<br \/>/g, '<\/p>\n<p>');
+		html = html.replace(/<p><\/p>/g, '');
+		html = html.replace(/<p> <\/p>/g, '');
+		html = html.replace(/<\/div>/g, '');
+
+		html = html.replace(/<p>\s*活动详情\s*<\/p>/g, '<strong>活动详情<\/strong>');
+		html = html.replace(/<p>\s*活动详情：\s*<\/p>/g, '<strong>活动详情：<\/strong>');
+		html = html.replace(/<p>\s*活动规则\s*<\/p>/g, '<strong>活动规则<\/strong>');
+		html = html.replace(/<p>\s*活动规则：\s*<\/p>/g, '<strong>活动规则：<\/strong>');
+		html = html.replace(/<p>\s*活动细则\s*<\/p>/g, '<strong>活动细则<\/strong>');
+		html = html.replace(/<p>\s*活动细则：\s*<\/p>/g, '<strong>活动细则：<\/strong>');
+		html = html.replace(/<p>\s*规则与条款\s*<\/p>/g, '<strong>规则与条款<\/strong>');
+		html = html.replace(/<p>\s*规则与条款：\s*<\/p>/g, '<strong>规则与条款：<\/strong>');
+		html = html.replace(/<p>\s*优惠规则与条款\s*<\/p>/g, '<strong>规则与条款<\/strong>');
+		html = html.replace(/<p>\s*优惠规则与条款：\s*<\/p>/g, '<strong>规则与条款：<\/strong>');
+		html = html.replace(/[\s\r\n]+/g, '');
+		html = html.replace(/^\s+|\s+$/g, '');
+		html = html.replace(/<\/p>/g, '<\/p>\n');
+		html = html.replace(/<\/strong>/g, '<\/strong>\n');
+		//html = html.replace(/<\/p>\s*<p>/g, ' ');		
+		//html = html.replace(/<p><br\/><\/p>/g, '');
 		//html = html.replace(/\n+/g, '\n');
 		//html = html.replace('<table>', '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="otable">');
 		//console.log(html);
@@ -6460,6 +6479,7 @@ KindEditor.plugin('textclear', function(K) {
         });
     });
 });
+
 
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
