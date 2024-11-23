@@ -6002,7 +6002,7 @@ KindEditor.lang({
 	map : 'Google地图',
 	baidumap : '百度地图',
 	lineheight : '行距',
-	clearhtml : '清理HTML代码',
+	clearhtml : '清理表格代码',
 	textclear : '清理文字代码',
 	pagebreak : '插入分页符',
 	quickformat : '一键排版',
