@@ -139,6 +139,8 @@
   .ke-icon-clearhtml:before{content:"\e629"}
   .ke-icon-textclear{}
   .ke-icon-textclear:before{content: "\e6db";}
+  .ke-icon-cleartable{}
+  .ke-icon-cleartable:before{content: "\eb0b";}
   .ke-icon-insertfile{}
   .ke-icon-insertfile:before{content:"\e600"}
   .ke-icon-quickformat{}

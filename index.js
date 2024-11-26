@@ -6004,6 +6004,7 @@ KindEditor.lang({
 	lineheight : '行距',
 	clearhtml : '清理優惠代码',
 	textclear : '清理文字代码',
+	cleartable : '清理表格代码',
 	pagebreak : '插入分页符',
 	quickformat : '一键排版',
 	insertfile : '插入文件',
@@ -6219,8 +6220,7 @@ KindEditor.plugin('clearhtml', function(K) {
         html = html.replace(/(<div[^>]*>)/ig, '');
         html = html.replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/ig, '');
         html = html.replace(/<o:[^>]+>[\s\S]*?<\/o:[^>]+>/ig, '');
-        html = html.replace(/<xml>[\s\S]*?<\/xml>/ig, '');
-		
+        html = html.replace(/<xml>[\s\S]*?<\/xml>/ig, '');		
 
 		html = K.formatHtml(html, {
             a: ['id', 'class', 'href', 'target', 'name'],
@@ -6252,8 +6252,8 @@ KindEditor.plugin('clearhtml', function(K) {
 		});
 
 		// 输出提取后的 HTML 和表格内容
-		console.log(html);  // 输出只包含占位符的 HTML
-		console.log(tableCounter);
+		//console.log(html);  // 输出只包含占位符的 HTML
+		//console.log(tableCounter);
 		// 格式化後的 HTML
         
 
@@ -6265,8 +6265,6 @@ KindEditor.plugin('clearhtml', function(K) {
 		html = html.replace(/<p><\/p>/g, '');
 		html = html.replace(/<p> <\/p>/g, '');
 		html = html.replace(/<\/div>/g, '');
-		
-
 		html = html.replace(/<p>\s*活动详情\s*<\/p>/g, '<strong>活动详情<\/strong>');
 		html = html.replace(/<p>\s*活动详情：\s*<\/p>/g, '<strong>活动详情：<\/strong>');
 		html = html.replace(/<p>\s*活动规则\s*<\/p>/g, '<strong>活动规则<\/strong>');
@@ -6282,16 +6280,8 @@ KindEditor.plugin('clearhtml', function(K) {
 		html = html.replace(/<\/p>/g, '<\/p>\n');
 		html = html.replace(/<\/strong>/g, '<\/strong>\n');
 		html = html.replace(/<a/g, '<a ');
-		console.log(html);  // 输出只包含占位符的 HTML
-
-
-
-
-
-
-
-
-		console.log(tableContents);  // 输出存储的表格内容
+		//console.log(html);  // 输出只包含占位符的 HTML
+		//console.log(tableContents);  // 输出存储的表格内容
 
 		// 步骤 2: 格式化和调整表格宽度
 		function adjustTableWidth(tableContents) {
@@ -6304,7 +6294,9 @@ KindEditor.plugin('clearhtml', function(K) {
 			//tableContents = tableContents.replace(/<p>\s*(.*?)\s*<\/p>/g, '$1'); // 移除包含内容的 <p> 标签，保留内部内容
 			tableContents = tableContents.replace(/<p>/g, ''); // 移除 <p> 标签
 			tableContents = tableContents.replace(/<\/p>/g, ''); // 移除包含内容的 </p> 标签
-			
+			tableContents = tableContents.replace(/[\n]+/g, '');
+			tableContents = tableContents.replace(/>/g, '>\n');
+			tableContents = tableContents.replace(/<\/td>/g, '\n<\/td>');
 			// 创建一个临时的 div 来处理格式化后的 HTML
 			var table = document.createElement('div');
 			table.innerHTML = tableContents;
@@ -6335,7 +6327,7 @@ KindEditor.plugin('clearhtml', function(K) {
 			return table.innerHTML;  // 返回调整后的 HTML
 		}
 		
-		console.log(tableContents);        
+		//console.log(tableContents);        
 
         // 自動調整寬度的邏輯
         var table = document.createElement('div');
@@ -6375,7 +6367,7 @@ KindEditor.plugin('clearhtml', function(K) {
 		  });
 
         // 更新編輯器中的 HTML
-		console.log(html)
+		//console.log(html)
         self.html(html);        
         self.sync();
         self.cmd.selection(true);
@@ -6454,7 +6446,7 @@ KindEditor.plugin('textclear', function(K) {
 		
 
         // 清除不必要的 HTML 標籤
-		console.log(html);		
+		//console.log(html);		
         html = html.replace(/(<script[^>]*>)([\s\S]*?)(<\/script>)/ig, '');
         html = html.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/ig, '');
         html = html.replace(/(<h1[^>]*>)/ig, '<h1>');
@@ -6493,14 +6485,13 @@ KindEditor.plugin('textclear', function(K) {
 		//html = html.replace(/(</p[^>]*)/g, '>\n');
 		//html = html.replace(/>\s+</g, '><');
 		//html = html.replace(/<\/p>/g, '</p>\n');
-		console.log(html);
+		//console.log(html);
 		
 		html = html.replace(/&nbsp;/g, '');
 		html = html.replace(/<br \/>/g, '<\/p>\n<p>');
 		html = html.replace(/<p><\/p>/g, '');
 		html = html.replace(/<p> <\/p>/g, '');
 		html = html.replace(/<\/div>/g, '');
-
 		html = html.replace(/<p>\s*活动详情\s*<\/p>/g, '<strong>活动详情<\/strong>');
 		html = html.replace(/<p>\s*活动详情：\s*<\/p>/g, '<strong>活动详情：<\/strong>');
 		html = html.replace(/<p>\s*活动规则\s*<\/p>/g, '<strong>活动规则<\/strong>');
@@ -6521,10 +6512,7 @@ KindEditor.plugin('textclear', function(K) {
 		//html = html.replace(/<p><br\/><\/p>/g, '');
 		//html = html.replace(/\n+/g, '\n');
 		//html = html.replace('<table>', '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="otable">');
-		//console.log(html);
-		
-
-       
+		//console.log(html);     
 
         // 更新編輯器中的 HTML
         self.html(html);        
@@ -6538,7 +6526,7 @@ KindEditor.plugin('textclear', function(K) {
 		
 
         // 清除不必要的 HTML 標籤
-		console.log(html);		
+		//console.log(html);		
         html = html.replace(/(<script[^>]*>)([\s\S]*?)(<\/script>)/ig, '');
         html = html.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/ig, '');
         html = html.replace(/(<h1[^>]*>)/ig, '<h1>');
@@ -6578,14 +6566,13 @@ KindEditor.plugin('textclear', function(K) {
 		//html = html.replace(/(</p[^>]*)/g, '>\n');
 		//html = html.replace(/>\s+</g, '><');
 		//html = html.replace(/<\/p>/g, '</p>\n');
-		console.log(html);
+		//console.log(html);
 		
 		html = html.replace(/&nbsp;/g, '');
 		html = html.replace(/<br \/>/g, '<\/p>\n<p>');
 		html = html.replace(/<p><\/p>/g, '');
 		html = html.replace(/<p> <\/p>/g, '');
 		html = html.replace(/<\/div>/g, '');
-
 		html = html.replace(/<p>\s*活动详情\s*<\/p>/g, '<strong>活动详情<\/strong>');
 		html = html.replace(/<p>\s*活动详情：\s*<\/p>/g, '<strong>活动详情：<\/strong>');
 		html = html.replace(/<p>\s*活动规则\s*<\/p>/g, '<strong>活动规则<\/strong>');
@@ -6606,11 +6593,7 @@ KindEditor.plugin('textclear', function(K) {
 		//html = html.replace(/<p><br\/><\/p>/g, '');
 		//html = html.replace(/\n+/g, '\n');
 		//html = html.replace('<table>', '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="otable">');
-		//console.log(html);
-		
-
-       
-
+		//console.log(html);	
         // 更新編輯器中的 HTML
         self.html(html);        
         self.sync();
@@ -6673,6 +6656,151 @@ KindEditor.plugin('textclear', function(K) {
     });
 	
 });
+
+/*******************************************************************************
+* KindEditor - WYSIWYG HTML Editor for Internet
+* Copyright (C) 2006-2011 kindsoft.net
+*
+* @author Roddy <luolonghao@gmail.com>
+* @site http://www.kindsoft.net/
+* @licence http://www.kindsoft.net/license.php
+*清理表格代码
+*******************************************************************************/
+KindEditor.plugin('cleartable', function(K) {
+    var self = this, name = 'cleartable';
+    self.clickToolbar(name, function() {
+        self.focus();
+        var html = self.html();
+
+        // 清除不必要的 HTML 標籤
+        html = html.replace(/(<script[^>]*>)([\s\S]*?)(<\/script>)/ig, '');
+        html = html.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/ig, '');
+        html = html.replace(/(<h1[^>]*>)/ig, '<h1>');
+        html = html.replace(/(<h2[^>]*>)/ig, '<h2>');
+        html = html.replace(/(<h3[^>]*>)/ig, '<h3>');
+        html = html.replace(/(<h4[^>]*>)/ig, '<h4>');
+        html = html.replace(/(<h5[^>]*>)/ig, '<h5>');
+        html = html.replace(/(<h6[^>]*>)/ig, '<h6>');
+        html = html.replace(/(<p[^>]*>)/ig, '');
+        html = html.replace(/(<span[^>]*>)/ig, '<span>');
+        html = html.replace(/(<div[^>]*>)/ig, '');
+        html = html.replace(/<w:[^>]+>[\s\S]*?<\/w:[^>]+>/ig, '');
+        html = html.replace(/<o:[^>]+>[\s\S]*?<\/o:[^>]+>/ig, '');
+        html = html.replace(/<xml>[\s\S]*?<\/xml>/ig, '');		
+
+        // 格式化後的 HTML
+        html = K.formatHtml(html, {
+            a: ['id', 'class', 'href', 'target', 'name'],
+			'img': ['src'],
+            embed: ['src', 'width', 'height', 'flashvars', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowFullscreen', 'allowscriptaccess'],
+            pre: ['class'],
+            img: ['src', 'width', 'height', '.width', '.height'],
+            table: [],
+            'td,th': ['rowspan', 'colspan'],
+            'div,hr,br,tbody,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6,dl,dt,dd': [],
+            'tr,sup,sub': ['class'],
+			'img': ['src'],
+            video: ['width', 'height', 'controls', 'name'],
+            source: ['src', 'type'],
+            iframe: ['src', 'frameborder', 'style']
+        });
+		//html = html.replace(/>\s+</g, '><');
+		html = html.replace(/</g, '\n<');
+		html = html.replace(/>/g, '>\n');
+		html = html.replace(/\n+/g, '\n');
+		html = html.replace('<table>', '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="otable">');
+		//console.log(html);
+
+        // 自動調整寬度的邏輯
+        var table = document.createElement('div');
+        table.innerHTML = html;
+        var rows = table.querySelectorAll('table tr');
+        var maxTdCount = 0;
+        var maxTdRow = null;
+
+        for (var i = 0; i < rows.length; i++) {
+            var tds = rows[i].getElementsByTagName('td');
+            if (tds.length > maxTdCount) {
+                maxTdCount = tds.length;
+                maxTdRow = rows[i];
+            }
+        }
+
+        if (maxTdRow) {
+            var tds = maxTdRow.getElementsByTagName('td');
+            var tdCount = tds.length;
+            var widthPerCell = 100 / tdCount;
+			widthPerCell = Math.floor(widthPerCell * 10) / 10;
+            for (var i = 0; i < tdCount; i++) {
+                tds[i].style.width = widthPerCell + '%';
+            }
+        }
+
+        // 返回處理過的 HTML
+        html = table.innerHTML;
+
+        // 更新編輯器中的 HTML
+        self.html(html);        
+        self.sync();
+        self.cmd.selection(true);
+
+        // 顯示處理後的 HTML 以便複製
+        var resultContainer = document.getElementById('code-container');
+        if (!resultContainer) {
+            resultContainer = document.createElement('pre');
+            resultContainer.id = 'code-container';
+            resultContainer.style.border = '1px solid #ccc';
+            resultContainer.style.padding = '10px';
+            resultContainer.style.marginTop = '10px';
+            resultContainer.style.backgroundColor = '#333';
+	    resultContainer.style.color = '#FFF';
+            resultContainer.style.whiteSpace = 'pre-wrap';
+            resultContainer.style.wordWrap = 'break-word';
+            resultContainer.style.fontFamily = 'monospace';
+            resultContainer.style.fontSize = '14px';
+            resultContainer.style.lineHeight = '1.5';
+            document.body.appendChild(resultContainer);
+        }
+       
+        resultContainer.innerText = html;
+
+        var existingButton = document.getElementById('copybutton001');
+        if (existingButton) {
+            existingButton.remove();
+        }
+        var copyButton = document.createElement('button');
+        copyButton.id = 'copybutton001';
+        copyButton.innerText = '複製代碼';
+        copyButton.style.marginTop = '10px';
+        copyButton.style.padding = '5px 10px';
+        copyButton.style.cursor = 'pointer';
+		copyButton.style.margin = '0 auto';
+		copyButton.style.display = 'block';
+        document.body.insertBefore(copyButton, document.body.firstChild);
+
+        copyButton.addEventListener('click', function() {
+            var range = document.createRange();
+            range.selectNode(resultContainer);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    alert('代碼已複製！');
+                } else {
+                    alert('複製失敗，請手動複製。');
+                }
+            } catch (err) {
+                alert('無法複製代碼。');
+            }
+
+            window.getSelection().removeAllRanges();
+        });
+    });
+});
+
+
 
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
