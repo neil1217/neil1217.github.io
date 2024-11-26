@@ -6706,6 +6706,8 @@ KindEditor.plugin('cleartable', function(K) {
 			tableContents = tableContents.replace(/[\n]+/g, '');
 			tableContents = tableContents.replace(/>/g, '>\n');
 			tableContents = tableContents.replace(/<\/td>/g, '\n<\/td>');
+			tableContents = tableContents.replace(/&nbsp;/g, '');
+			
 			// 创建一个临时的 div 来处理格式化后的 HTML
 			var table = document.createElement('div');
 			table.innerHTML = tableContents;
