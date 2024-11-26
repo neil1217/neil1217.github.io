@@ -6412,18 +6412,8 @@ KindEditor.plugin('clearhtml', function(K) {
             range.selectNode(resultContainer);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
-
-            try {
-                var successful = document.execCommand('copy');
-                if (successful) {
-                    alert('代碼已複製！');
-                } else {
-                    alert('複製失敗，請手動複製。');
-                }
-            } catch (err) {
-                alert('無法複製代碼。');
-            }
-
+	    document.execCommand('copy');
+            alert('代碼已複製！');
             window.getSelection().removeAllRanges();
         });
     });
@@ -6640,18 +6630,8 @@ KindEditor.plugin('textclear', function(K) {
             range.selectNode(resultContainer);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
-
-            try {
-                var successful = document.execCommand('copy');
-                if (successful) {
-                    alert('代碼已複製！');
-                } else {
-                    alert('複製失敗，請手動複製。');
-                }
-            } catch (err) {
-                alert('無法複製代碼。');
-            }
-
+	    document.execCommand('copy');
+            alert('代碼已複製！');
             window.getSelection().removeAllRanges();
         });
     });
@@ -6897,18 +6877,8 @@ KindEditor.plugin('cleartable', function(K) {
             range.selectNode(resultContainer);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
-
-            try {
-                var successful = document.execCommand('copy');
-                if (successful) {
-                    alert('代碼已複製！');
-                } else {
-                    alert('複製失敗，請手動複製。');
-                }
-            } catch (err) {
-                alert('無法複製代碼。');
-            }
-
+	    document.execCommand('copy');
+	    alert('代碼已複製！');
             window.getSelection().removeAllRanges();
         });
     });
@@ -6979,17 +6949,10 @@ KindEditor.plugin('imgurl11', function(K) {
 			 window.getSelection().removeAllRanges();
 			 window.getSelection().addRange(range);
  
-			 try {
-				 var successful = document.execCommand('copy');
-				 if (successful) {
-					 alert('代碼已複製！');
-				 } else {
-					 alert('複製失敗，請手動複製。');
-				 }
-			 } catch (err) {
-				 alert('無法複製代碼。');
-			 }
- 
+			 document.execCommand('copy');
+			 alert('代碼已複製！，输入框已重置');
+			 html = '&lt;img src="http://file1.sg.local"&gt;'
+			 self.html(html); 
 			 window.getSelection().removeAllRanges();
 		 });
 
