@@ -6475,6 +6475,7 @@ KindEditor.plugin('clearhtml', function(K) {
 	    document.execCommand('copy');
             alert('代碼已複製！');
             window.getSelection().removeAllRanges();
+		self.html(''); 
         });
     });
 });
