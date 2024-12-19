@@ -6005,6 +6005,7 @@ KindEditor.lang({
 	clearhtml : '清理優惠代码',
 	textclear : '清理文字代码',
 	cleartable : '清理表格代码',
+	clearall: '清理所有',
 	imgurl11 : '图片链接',
 	usedtext : '常用文字',
 	pagebreak : '插入分页符',
@@ -6955,6 +6956,30 @@ KindEditor.plugin('cleartable', function(K) {
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
+*常用文字
+*******************************************************************************/
+KindEditor.plugin('clearall', function(K) {
+    var self = this, name = 'clearall';    
+	self.clickToolbar(name, function() {
+        self.focus();
+
+        // 清除不必要的 HTML 標籤
+		//console.log(html);		
+        html = ''
+		self.html(html); 		
+		 // 顯示處理後的 HTML 以便複製
+
+          
+    });
+	
+});
+/*******************************************************************************
+* KindEditor - WYSIWYG HTML Editor for Internet
+* Copyright (C) 2006-2011 kindsoft.net
+*
+* @author Roddy <luolonghao@gmail.com>
+* @site http://www.kindsoft.net/
+* @licence http://www.kindsoft.net/license.php
 *图片网址
 *******************************************************************************/
 KindEditor.plugin('imgurl11', function(K) {
@@ -7043,8 +7068,7 @@ KindEditor.plugin('usedtext', function(K) {
         html = `接收<br><br>
 		优惠活动<br><br>
 		争霸战图片上传<br><br>
-		导航条<br><br>
-		修改  
+		导航条
 		`
 		self.html(html); 		
 		 // 顯示處理後的 HTML 以便複製

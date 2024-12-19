@@ -491,6 +491,11 @@
   content: "\eb0b";
 }
 
+.ke-icon-clearall {}
+
+.ke-icon-clearall:before {
+  content: "\e63d";
+}
 .ke-icon-imgurl11 {}
 
 .ke-icon-imgurl11:before {
