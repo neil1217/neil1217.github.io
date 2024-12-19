@@ -7043,7 +7043,8 @@ KindEditor.plugin('usedtext', function(K) {
         html = `接收<br><br>
 		优惠活动<br><br>
 		争霸战图片上传<br><br>
-		导航条
+		导航条<br><br>
+		修改  
 		`
 		self.html(html); 		
 		 // 顯示處理後的 HTML 以便複製
