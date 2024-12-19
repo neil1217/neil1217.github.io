@@ -6006,6 +6006,7 @@ KindEditor.lang({
 	textclear : '清理文字代码',
 	cleartable : '清理表格代码',
 	imgurl11 : '图片链接',
+	usedtext : '常用文字',
 	pagebreak : '插入分页符',
 	quickformat : '一键排版',
 	insertfile : '插入文件',
@@ -7023,7 +7024,37 @@ KindEditor.plugin('imgurl11', function(K) {
     });
 	
 });
+/*******************************************************************************
+* KindEditor - WYSIWYG HTML Editor for Internet
+* Copyright (C) 2006-2011 kindsoft.net
+*
+* @author Roddy <luolonghao@gmail.com>
+* @site http://www.kindsoft.net/
+* @licence http://www.kindsoft.net/license.php
+*常用文字
+*******************************************************************************/
+KindEditor.plugin('usedtext', function(K) {
+    var self = this, name = 'usedtext';    
+	self.clickToolbar(name, function() {
+        self.focus();
 
+        // 清除不必要的 HTML 標籤
+		//console.log(html);		
+        html = `接收<br><br>
+		优惠活动<br><br>
+		争霸战图片上传<br><br>
+		导航条
+		`
+		self.html(html); 		
+		 // 顯示處理後的 HTML 以便複製
+
+		 
+		 
+
+          
+    });
+	
+});
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
 * Copyright (C) 2006-2011 kindsoft.net
