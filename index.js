@@ -7067,6 +7067,7 @@ KindEditor.plugin('usedtext', function(K) {
 		//console.log(html);		
         html = `接收<br><br>
 		优惠活动<br><br>
+ 		弹窗<br><br>
 		争霸战图片上传<br><br>
 		导航条
 		`
