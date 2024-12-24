@@ -6324,14 +6324,14 @@ KindEditor.plugin('clearhtml', function(K) {
 	 	html = html.replace(/<h4>\s*规则与条款：\s*<\/h4>/g, '<strong>规则与条款：<\/strong>');
 	 	html = html.replace(/<h5>\s*规则与条款：\s*<\/h5>/g, '<strong>规则与条款：<\/strong>');
 	   	html = html.replace(/<h6>\s*规则与条款：\s*<\/h6>/g, '<strong>规则与条款：<\/strong>');
-		html = html.replace(/<p>\s*优惠规则与条款\s*<\/p>/g, '<strong>规则与条款<\/strong>');
+		html = html.replace(/<p>\s*优惠规则与条款\s*<\/p>/g, '<strong>优惠规则与条款<\/strong>');
 	    	html = html.replace(/<h1>\s*优惠规则与条款\s*<\/h1>/g, '<strong>优惠规则与条款<\/strong>');
 	  	html = html.replace(/<h2>\s*优惠规则与条款\s*<\/h2>/g, '<strong>优惠规则与条款<\/strong>');
 	  	html = html.replace(/<h3>\s*优惠规则与条款\s*<\/h3>/g, '<strong>优惠规则与条款<\/strong>');
 	 	html = html.replace(/<h4>\s*优惠规则与条款\s*<\/h4>/g, '<strong>优惠规则与条款<\/strong>');
 	 	html = html.replace(/<h5>\s*优惠规则与条款\s*<\/h5>/g, '<strong>优惠规则与条款<\/strong>');
 	   	html = html.replace(/<h6>\s*优惠规则与条款\s*<\/h6>/g, '<strong>优惠规则与条款<\/strong>');
-		html = html.replace(/<p>\s*优惠规则与条款：\s*<\/p>/g, '<strong>规则与条款：<\/strong>');
+		html = html.replace(/<p>\s*优惠规则与条款：\s*<\/p>/g, '<strong>优惠规则与条款：<\/strong>');
 	    	html = html.replace(/<h1>\s*优惠规则与条款：\s*<\/h1>/g, '<strong>优惠规则与条款：<\/strong>');
 	  	html = html.replace(/<h2>\s*优惠规则与条款：\s*<\/h2>/g, '<strong>优惠规则与条款：<\/strong>');
 	  	html = html.replace(/<h3>\s*优惠规则与条款：\s*<\/h3>/g, '<strong>优惠规则与条款：<\/strong>');
