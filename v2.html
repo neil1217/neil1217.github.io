@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word to HTML Converter</title>
+    <style>
+        body {
+            background-color: #333;
+            margin: 0px;
+        }
+
+        div.btn {
+            height: 50px;
+            width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+        }
+
+        div.edit {
+            width: 900px;
+            margin: 0 auto;
+        }
+
+        button {
+            height: 25px;
+            margin-right: 10px;
+
+        }
+
+        button.copy {
+            display: none;
+        }
+
+        button.copy.on {
+            display: block;
+        }
+
+        #editableArea {
+            border: 1px solid #374366;
+            height: 509px;
+            width: 100%;
+            background-color: #f9f9f9;
+            overflow-x: auto;
+            margin: 0 auto;
+        }
+
+        #htmlOutput {
+            border: 1px solid #1e2d55;
+            padding: 10px;
+            white-space: pre-wrap;
+            background-color: #222;
+            max-height: 300px;
+            overflow-y: auto;
+            color: #fff;
+            font-family: monospace;
+            /* 让文本显示为等宽字体，方便查看原始代码 */
+            white-space: pre-wrap;
+            /* 保留空格和换行 */
+            word-wrap: break-word;
+            /* 防止长文本溢出 */
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- 用户可以粘贴格式化文本的区域 -->
+    <div class="good">
+        <div class="btn">
+            <select class="webselector">
+                <option value="web0">web</option>
+                <option value="blm">blm</option>
+                <option value="bwin">bwin</option>
+            </select>
+            <button onclick="convertToHtml()">轉換</button>
+            <button onclick="convertToHtml()" class="copy">複製</button>
+        </div>
+        <div class="edit">
+            <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>
+        </div>
+    </div>
+
+
+
+
+
+    <div id="htmlOutput"></div>
+    <!-- <script src="xi.js"></script> -->
+    <script>
+        const redList = ['#e03e2d', 'rgb(224 62 45)', 'red']
+        const orangeList = ['#c45911', '#ed7d31', 'rgb(254,152,42)', 'rgb(237,125,49)']
+        const noMarkList = ['white', 'whitesmoke', 'rgb(51,51,51)', 'rgb(61, 67, 70)', 'rgb(50,50,50)', 'black', '#333', '#333333', '#fff', '#ffffff', '#323232', 'windowtext']
+
+
+
+
+        let webselector = document.querySelector('.webselector')
+        webselector.addEventListener('change', (e) => {
+            localStorage.setItem('web', e.target.value)
+        })
+
+
+
+
+        function convertToHtml() {
+
+            //localStorage.setItem('web', 'web0')
+            let web = localStorage.getItem('web')
+            if (web === 'web0') {
+                web = {
+                    trcolor: 'red',
+                    strongtag: 'strong',
+                    strongcolor: '',
+                    spancolor: 'red',
+                    emcolor: 'red',
+                    strongclasscolor: false,
+                    tableBgStr: '',
+                    tableAttribute: ['100%', '1', '0', '0']
+                }
+            } else if (web === 'bwin') {
+                web = {
+                    trcolor: 'red',
+                    strongtag: 'strong',
+                    strongcolor: 'orange2',
+                    spancolor: 'red',
+                    emcolor: 'orange2',
+                    strongclasscolor: true,
+                    tableBgStr: '',
+                    tableAttribute: ['100%', '1', '0', '0']
+                }
+            } else if (web === 'blm') {
+                web = {
+                    trcolor: 'red',
+                    strongtag: 'strong',
+                    strongcolor: '',
+                    spancolor: 'red',
+                    emcolor: 'orange2',
+                    strongclasscolor: true,
+                    tableBgStr: '',
+                    tableAttribute: ['100%', '1', '0', '0']
+
+                }
+            }
+
+
+            function areAttributesEqual(elementA, elementB) {
+                // 获取所有属性名称
+                const attributesA = elementA.getAttributeNames();
+                const attributesB = elementB.getAttributeNames();
+
+                // 比较属性的数量，若数量不同则直接返回 false
+                if (attributesA.length !== attributesB.length) {
+                    return false;
+                }
+
+                // 遍历每个属性
+                for (let i = 0; i < attributesA.length; i++) {
+                    const attrName = attributesA[i];
+
+                    // 比较属性名称
+                    if (attrName !== attributesB[i]) {
+                        return false;
+                    }
+
+                    // 比较属性值
+                    if (elementA.getAttribute(attrName) !== elementB.getAttribute(attrName)) {
+                        return false;
+                    }
+                }
+
+                // 如果没有发现不同，返回 true
+                return true;
+            }
+
+
+
+
+            // 获取用户粘贴的内容
+            let content = document.getElementById("editableArea").innerHTML;
+
+
+            // 移除不必要的标签
+            content = content.replace(/<o:p><\/o:p>/g, '');
+            content = content.replace(/&nbsp;/g, '')
+            content = content.replace(/' '/g, '')
+            content = content.replace(/\<!--[\s\S]*?--\>/g, '');
+            content = content.replace(/style/g, ' style');
+            content = content.replace(/src/g, ' src');
+            content = content.replace(/class/g, ' class');
+            content = content.replace(/ href/g, ' href');
+            content = content.replace(/ target/g, ' target');
+            content = content.replace(/ colspan/g, ' colspan');
+            content = content.replace(/ rowspan/g, ' rowspan');
+
+
+
+
+            let tempDiv = document.createElement('div');
+            tempDiv.classList.add('outout')
+            tempDiv.innerHTML = content;
+            let i = 0
+            let count = true
+            while (count) {
+                count = false
+                elements = tempDiv.querySelectorAll('*')
+                elements.forEach(e => {
+                    if (!e.innerText.trim() && !e.innerHTML.trim() && e.tagName !== 'IMG' && e.tagName !== 'BR' && e.tagName !== 'A') {
+                        e.remove()
+                        count = true
+                    }
+                })
+            }
+
+            elements = tempDiv.querySelectorAll('*')
+
+
+            elements.forEach(ele => {
+                const attributes = ele.attributes
+                //篩選屬性
+                for (let i = attributes.length - 1; i >= 0; i--) {
+                    const attribute = attributes[i]
+                    if (attribute.name !== 'style' && attribute.name !== 'src' && attribute.name !== 'href' && attribute.name !== 'target' && attribute.name !== 'colspan' && attribute.name !== 'rowspan') {
+                        ele.removeAttribute(attribute.name)
+                    }
+                }
+                //清理STYLE
+                if (ele.hasAttribute('style')) {
+                    let styleStr = ele.getAttribute('style').replace(/\s/g, '').split(';')
+                    let newStyleStr = styleStr.filter(est => {
+                        est = est.toLowerCase()
+                        if (est.startsWith('color:')) {
+                            let colorStr = est.replace('color:', '')
+                            if (redList.indexOf(colorStr) !== -1) {
+                                ele.classList.add(`${web.spancolor}`)
+
+                                return false
+                            } else if (orangeList.indexOf(colorStr) !== -1) {
+                                ele.classList.add(`${web.emcolor}`)
+                                return false
+                            } else if (noMarkList.indexOf(colorStr) !== -1) {
+                                return false
+                            } else {
+                                console.log(`未記錄顏色${colorStr}`);
+                                return true
+                            }
+                        }
+                        if (est.startsWith('background:teal')) {
+                            ele.classList.add(`title`)
+                            return false
+                        }
+                        if (est.startsWith('font-size:')) {
+                            let fontSizeStr = est.replace('font-size:', '')
+                            fontSizeStr = fontSizeStr.split('p')
+                            //console.log(fontSizeStr);
+                            if (Number(fontSizeStr[0]) >= 19) {
+                                ele.classList.add(`title`)
+                                return false
+                            }
+                        }
+                        if (ele.tagName === 'TABLE') {
+
+                            if (est.startsWith('background:')) {
+                                web.tableBgStr = est.replace('background:', '')
+                            } else if (est.startsWith('background-color:')) {
+                                web.tableBgStr = est.replace('background-color:', '')
+                            }
+                            return false
+                        }
+                        if (ele.tagName === 'TD') {
+                            let tdBgStr = ''
+                            if (est.startsWith('background:')) {
+                                tdBgStr = est.replace('background:', '')
+                            } else if (est.startsWith('background-color:')) {
+                                tdBgStr = est.replace('background-color:', '')
+                            }
+                            if (web.tableBgStr !== tdBgStr && tdBgStr !== '') {
+                                ele.classList.add(`${web.trcolor}`)
+                                return false
+                            }
+                        }
+                        return false
+                    })
+                    let newStyleList = newStyleStr.join(';').trim()
+                    newStyleList && newStyleList.length !== 0 ? ele.style.cssText = newStyleList : ele.removeAttribute('style')
+                }
+            })
+
+            let divTF = true
+            while (divTF) {
+                divTF = false
+                const divAll = tempDiv.querySelectorAll('div')
+                divAll.forEach(e => {
+                    if (e.className !== 'outout') {
+                        e.childNodes
+                        while (e.firstChild) {
+                            e.parentElement.insertBefore(e.firstChild, e)
+                        }
+                        e.remove()
+                        divTF = true
+
+                    }
+                })
+            }
+
+
+
+
+            let emTF = true
+            while (emTF) {
+                emTF = false
+                let emEle = tempDiv.querySelectorAll('em')
+                emEle.forEach(e => {
+
+                    if (!e.hasAttributes()) {
+                        let removeTF = false
+                        while (e.firstChild) {
+                            e.parentElement.insertBefore(e.firstChild, e)
+                            removeTF = true
+                        }
+                        if (removeTF) {
+                            e.remove()
+                            emTF = true
+                        }
+                    } else {
+                        const newSpan = document.createElementNS('span')
+                        if (e.style.cssText) {
+                            newSpan.style.cssText = e.style.cssText
+                        }
+                        if (e.className) {
+                            newSpan.className = e.className
+                        }
+                        newSpan.innerHTML = e.innerHTML
+                        e.parentElement.replaceChild(newSpan, e)
+                        emTF = true
+                    }
+
+                })
+            }
+
+
+            let spanTF = true
+            while (spanTF) {
+                spanTF = false
+                let spanAll = tempDiv.querySelectorAll('span')
+                spanAll.forEach(e => {
+                    if (!e.hasAttributes()) {
+                        let removeTF = false
+                        while (e.firstChild) {
+                            e.parentElement.insertBefore(e.firstChild, e)
+                            removeTF = true
+                        }
+                        if (removeTF) {
+                            e.remove()
+                            spanTF = true
+                        }
+                    }
+                })
+            }
+
+
+
+            let h1TF = true
+            while (h1TF) {
+                h1TF = false
+                let h1All = tempDiv.querySelectorAll('h1')
+                h1All.forEach(e => {
+                    const newstrong = document.createElement('strong')
+                    if (e.style.cssText) {
+                        newstrong.style.cssText = e.style.cssText
+                    }
+                    if (e.className) {
+                        newstrong.className = e.className
+                    }
+                    newstrong.innerHTML = e.innerHTML
+                    e.parentElement.replaceChild(newstrong, e)
+                    h1TF = true
+                })
+            }
+
+
+
+
+            let trstrong2TF = true
+            while (trstrong2TF) {
+                trstrong2TF = false
+                let trstrongAll = tempDiv.querySelectorAll('td strong')
+                trstrongAll.forEach(e => {
+                    const newB = document.createElement('b')
+                    if (e.style.cssText) {
+                        newB.style.cssText = e.style.cssText
+                    }
+                    if (e.className) {
+                        newB.className = e.className
+                    }
+                    newB.innerHTML = e.innerHTML
+                    e.parentElement.replaceChild(newB, e)
+                    trstrong2TF = true
+                })
+            }
+
+            let pTF = true
+            while (pTF) {
+                pTF = false
+                const pAll = tempDiv.querySelectorAll('p')
+                pAll.forEach(e => {
+
+                    pKid = e.childNodes
+                    for (let i = pKid.length - 1; i > 0; i--) {
+                        const a = pKid[i]
+                        const b = pKid[i - 1]
+                        if (a.nodeType === b.nodeType && a.nodeType === 1 && a.style.cssText === b.style.cssText && a.className === b.className && a.tagName === b.tagName) {
+                            b.innerHTML = b.innerHTML + a.innerHTML
+                            a.remove()
+                            pTF = true
+                        }
+                    }
+                })
+            }
+            let strongTF = true
+            while (strongTF) {
+                strongTF = false
+                const strongAll = tempDiv.querySelectorAll('strong')
+                strongAll.forEach(e => {
+
+                    strongKid = e.childNodes
+                    for (let i = strongKid.length - 1; i > 0; i--) {
+                        const a = strongKid[i]
+                        const b = strongKid[i - 1]
+                        if (a.nodeType === b.nodeType && a.nodeType === 1 && a.style.cssText === b.style.cssText && a.className === b.className && a.tagName === b.tagName) {
+                            b.innerHTML = b.innerHTML + a.innerHTML
+                            a.remove()
+                            strongTF = true
+                        }
+                    }
+                })
+            }
+
+            let aTF = true
+            while (aTF) {
+                aTF = false
+                const aAll = tempDiv.querySelectorAll('a')
+                aAll.forEach(e => {
+
+                    aKid = e.childNodes
+                    for (let i = aKid.length - 1; i > 0; i--) {
+                        const a = aKid[i]
+                        const b = aKid[i - 1]
+                        if (a.nodeType === b.nodeType && a.nodeType === 1 && a.style.cssText === b.style.cssText && a.className === b.className && a.tagName === b.tagName) {
+                            b.innerHTML = b.innerHTML + a.innerHTML
+                            a.remove()
+                            aTF = true
+                        }
+                    }
+                })
+            }
+
+            let bTF = true
+            while (bTF) {
+                bTF = false
+                const bAll = tempDiv.querySelectorAll('b')
+                bAll.forEach(e => {
+
+                    bKid = e.childNodes
+                    for (let i = bKid.length - 1; i > 0; i--) {
+                        const a = bKid[i]
+                        const b = bKid[i - 1]
+                        if (a.nodeType === b.nodeType && a.nodeType === 1 && a.style.cssText === b.style.cssText && a.className === b.className && a.tagName === b.tagName) {
+                            b.innerHTML = b.innerHTML + a.innerHTML
+                            a.remove()
+                            bTF = true
+                        }
+                    }
+                })
+            }
+
+
+            let tdPTF = true
+            while (tdPTF) {
+                tdPTF = false
+                const tdPAll = tempDiv.querySelectorAll('td p')
+                tdPAll.forEach(e => {
+                    while (e.firstChild) {
+                        e.parentElement.insertBefore(e.firstChild, e)
+                    }
+                    tdPTF = true
+                    e.remove()
+                })
+            }
+
+
+
+
+            let span2TF = true
+            while (span2TF) {
+                span2TF = false
+                const spanAll2 = tempDiv.querySelectorAll('span')
+                spanAll2.forEach(e => {
+                    if (e.parentElement && e.parentElement.tagName !== 'TD' && !e.parentElement.className & !e.parentElement.style.cssText && e.innerText === e.parentElement.innerText) {
+                        if (e.style.cssText) {
+                            e.parentElement.style.cssText = e.style.cssText
+                        }
+                        if (e.className) {
+                            e.parentElement.className = e.className
+                        }
+                        e.parentElement.innerHTML = e.innerHTML
+                        span2TF = true
+                    }
+                })
+            }
+
+            let titleTF = true
+            while (titleTF) {
+                titleTF = false
+                const titleAll = tempDiv.querySelectorAll('.title')
+                titleAll.forEach(e => {
+                    e.removeAttribute('style')
+                    e.removeAttribute('class')
+                    e.className = 'title'
+                    if (e.tagName.toLowerCase() !== `${web.strongtag}`) {
+                        newStrong = document.createElement(`${web.strongtag}`)
+                        // if (e.style.cssText) {
+                        //     newStrong.style.cssText = e.style.cssText
+                        // }
+                        if (e.className) {
+                            newStrong.className = e.className
+                        }
+                        newStrong.innerHTML = e.innerHTML
+                        e.parentElement.replaceChild(newStrong, e)
+                        titleTF = true
+                    }
+                    if (e) {
+
+                        if (e.parentElement && e.parentElement.tagName !== 'DIV' && e.tagName.toLowerCase() === `${web.strongtag}` && e.parentElement.innerText === e.innerText) {
+                            console.log(e);
+                            if (e.parentElement.parentElement) {
+                                e.parentElement.parentElement.replaceChild(e, e.parentElement)
+
+                            } else {
+                                tempDiv.insertBefore(e, e.parentElement)
+                                e.parentElement.remove()
+                                titleTF = true
+                            }
+
+                        }
+                    }
+
+                })
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            imgAll = tempDiv.querySelectorAll('img')
+            imgAll.forEach(e => {
+                e.src = 'http://file1.sg.local'
+            })
+
+
+            tempDiv.querySelectorAll('tr').forEach(tr => {
+                // 獲取該 <tr> 下所有的 <td>
+                const tdElements = tr.querySelectorAll('td');
+                // 檢查所有 <td> 是否都有 class="red"
+                const allRed = Array.from(tdElements).every(td => td.classList.contains('red'));
+
+                // 如果所有的 <td> 都有 class="red"
+                if (allRed) {
+                    // 刪除所有 <td> 元素
+                    tdElements.forEach(td => {
+                        td.classList.remove('red')
+                        if (td.className === '') {
+                            td.removeAttribute('class')
+                        }
+                    });
+                    // 在 <tr> 上添加 class="red"
+                    tr.classList.add('red');
+                }
+            });
+
+            tableAll = tempDiv.querySelectorAll('table')
+            tableAll.forEach(e => {
+                if (e.parentElement.className !== 'outout') {
+                    tempDiv.replaceChild(e, e.parentElement)
+                }
+                if (!e.hasAttributes()) {
+                    e.setAttribute('width', `${web.tableAttribute[0]}`)
+                    e.setAttribute('cellspacing', `${web.tableAttribute[1]}`)
+                    e.setAttribute('cellpadding', `${web.tableAttribute[2]}`)
+                    e.setAttribute('border', `${web.tableAttribute[3]}`)
+                }
+
+                let tdindex = 999
+                let trcount = 0
+                let trindex = 999
+                let eTr = e.querySelectorAll('tr')
+                eTr.forEach((ele, index) => {
+                    if (ele.children) {
+                        if (trcount < ele.children.length) {
+                            trcount = ele.children.length
+                            tdindex = index
+                        }
+                    }
+                })
+                eTr[tdindex].querySelectorAll('td').forEach(etr => {
+                    etr.style.cssText += `width:${100 / trcount}%;`
+                })
+            })
+
+
+            let title2TF = true
+            while (title2TF) {
+                title2TF = false
+                const strongTitle = tempDiv.querySelectorAll('.title')
+                strongTitle.forEach(e => {
+                    if (e.tagName.toLowerCase() === `${web.strongtag}` && e.parentElement.className === 'outout') {
+                        e.removeAttribute('class')
+                        if (e.hasAttribute('style')) {
+                            e.removeAttribute('style');
+                        }
+                        if (web.strongcolor) {
+                            e.classList.add(`${web.strongcolor}`)
+                        }
+                        if (e.className === '') {
+                            e.removeAttribute('class')
+                        }
+                    }
+                })
+            }
+
+
+
+
+            cleanedContent = tempDiv.innerHTML
+            // 显示为纯文本形式，不渲染 HTML
+            document.getElementById("htmlOutput").textContent = cleanedContent;
+            //渲染
+            //document.getElementById("htmlOutput").innerHTML = cleanedContent;
+
+            //開啟複製按鈕
+            document.querySelector('.copy').classList.add('on')
+
+
+
+            document.querySelector('.copy').addEventListener('click', function () {
+                navigator.clipboard.writeText(document.getElementById("htmlOutput").textContent)
+                alert('代碼已複製！');
+            });
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>
