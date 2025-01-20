@@ -82,6 +82,7 @@
             </select>
             <button onclick="convertToHtml()">轉換</button>
             <button onclick="convertToHtml()" class="copy">複製</button>
+            <button onclick="clearnHtml()">清除</button>
         </div>
         <div class="edit">
             <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>
@@ -722,7 +723,10 @@
             });
         }
 
-
+        function clearnHtml() {
+            document.getElementById("editableArea").innerHTML = ''
+            document.getElementById("htmlOutput").innerHTML = ''
+        }
 
 
     </script>
