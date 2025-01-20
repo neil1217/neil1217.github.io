@@ -50,7 +50,7 @@
         }
 
         #htmlOutput {
-            border: 1px solid #1e2d55;
+            border: 5px solid #0a2879;
             padding: 10px;
             white-space: pre-wrap;
             background-color: #222;
@@ -58,11 +58,8 @@
             overflow-y: auto;
             color: #fff;
             font-family: monospace;
-            /* 让文本显示为等宽字体，方便查看原始代码 */
             white-space: pre-wrap;
-            /* 保留空格和换行 */
             word-wrap: break-word;
-            /* 防止长文本溢出 */
         }
 
         div.nonono {
@@ -81,7 +78,7 @@
             width: 500px;
             height: 500px;
             background-color: #333;
-            border: 1px yellow solid;
+            border: 5px #008cf399 solid;
             margin: 30px auto 0px auto;
             z-index: 3;
             position: relative;
@@ -90,11 +87,12 @@
         div.pic a {
             color: #fff;
             position: absolute;
-            top: 0px;
+            top: -22px;
             display: block;
-            right: -20px;
+            right: -35px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 50px;
         }
 
         div.piccopy {
@@ -110,7 +108,7 @@
         }
 
         div.piccopy textarea {
-           width: 230px;
+            width: 230px;
             height: 18px;
             margin-top: -3px;
             margin-right: 5px;
@@ -123,6 +121,25 @@
 
         div.piccopy button {
             margin-top: -3px;
+        }
+
+        div.daily {
+            width: 280px;
+            background-color: #222222;
+            position: absolute;
+            right: 20px;
+            top: 200px;
+        }
+
+        div.daily p {
+            color: #fff;
+            margin-left: 10px;
+            width: 250px;
+        }
+
+        div.daily button {
+            margin-left: 10px;
+            float: right;
         }
     </style>
 </head>
@@ -184,8 +201,18 @@
                     <button class='copytext'>复制</button>
                     <button class='clearntext'>清除</button>
                 </div>
-                <a onclick="closepicdiv()">X</a>
+                <a onclick="closepicdiv()">×</a>
             </div>
+        </div>
+
+        <div class="daily">
+            <p>&lt;span class="red"&gt;<button class='copytag'>复制</button></p>
+            <p>&lt;em class="red"&gt;<button class='copytag'>复制</button></p>
+            <p>&lt;span class="orange2"&gt;<button class='copytag'>复制</button></p>
+            <p>&lt;em class="orange2"&gt;<button class='copytag'>复制</button></p>
+            <p>&lt;/span&gt;<button class='copytag'>复制</button></p>
+            <p>&lt;/em&gt;<button class='copytag'>复制</button></p>
+            <p class="copything"></p>
         </div>
     </div>
 
@@ -218,6 +245,14 @@
         // })
 
         let copyBtn = document.querySelector('.copy')
+        let copytag = document.querySelector('.daily')
+
+        copytag.addEventListener('click', e => {
+            if (e.target.tagName === 'BUTTON') {
+                navigator.clipboard.writeText(e.target.parentElement.innerText.replace('复制', ''))
+                document.querySelector('copything').tagName.innerText = `${e.target.parentElement.innerText.replace('复制', '')}`
+            }
+        })
 
 
 
@@ -275,6 +310,18 @@
                     strongclasscolor: false,
                     tableBgStr: '',
                     tableAttribute: ['100%', '1', '1', '0']
+
+                }
+            } else if (web === 'bwylg') {
+                web = {
+                    trcolor: 'f_a1',
+                    strongtag: 'h3',
+                    strongcolor: '',
+                    spancolor: 'red',
+                    emcolor: 'red',
+                    strongclasscolor: false,
+                    tableBgStr: '',
+                    tableAttribute: ['100%', '1', '0', '0']
 
                 }
             } else if (web === 'bet') {
