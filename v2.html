@@ -82,12 +82,9 @@
             height: 500px;
             background-color: #333;
             border: 1px yellow solid;
-            margin: 0 auto;
-            position: absolute;
-            top: 30px;
-            left: 32%;
-            display: none;
+            margin: 30px auto 0px auto;
             z-index: 3;
+            position: relative;
         }
 
         div.pic a {
@@ -95,7 +92,7 @@
             position: absolute;
             top: 0px;
             display: block;
-            right: 0px;
+            right: -20px;
             cursor: pointer;
             font-weight: bold;
         }
@@ -150,40 +147,42 @@
             <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>
         </div>
 
-        <div class="pic">
-            <div class="piccopy" id='d01'>
-                <span>http://file1.sg.local</span>
-                <textarea class="pictext"></textarea>
-                <button class='copytext'>复制</button>
-                <button class='clearntext'>清除</button>
+
+        <div class="nonono">
+            <div class="pic">
+                <div class="piccopy" id='d01'>
+                    <span>http://file1.sg.local</span>
+                    <textarea class="pictext"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="piccopy" id='d02'>
+                    <span>http://file1.sg.local</span>
+                    <textarea class="pictext"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="piccopy" id='d03'>
+                    <span>http://file1.sg.local</span>
+                    <textarea class="pictext"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="piccopy" id='d04'>
+                    <span>http://file1.sg.local</span>
+                    <textarea class="pictext"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="piccopy" id='d05'>
+                    <span>http://file1.sg.local</span>
+                    <textarea class="pictext"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <a onclick="closepicdiv()">X</a>
             </div>
-            <div class="piccopy" id='d02'>
-                <span>http://file1.sg.local</span>
-                <textarea class="pictext"></textarea>
-                <button class='copytext'>复制</button>
-                <button class='clearntext'>清除</button>
-            </div>
-            <div class="piccopy" id='d03'>
-                <span>http://file1.sg.local</span>
-                <textarea class="pictext"></textarea>
-                <button class='copytext'>复制</button>
-                <button class='clearntext'>清除</button>
-            </div>
-            <div class="piccopy" id='d04'>
-                <span>http://file1.sg.local</span>
-                <textarea class="pictext"></textarea>
-                <button class='copytext'>复制</button>
-                <button class='clearntext'>清除</button>
-            </div>
-            <div class="piccopy" id='d05'>
-                <span>http://file1.sg.local</span>
-                <textarea class="pictext"></textarea>
-                <button class='copytext'>复制</button>
-                <button class='clearntext'>清除</button>
-            </div>
-            <a onclick="closepicdiv()">X</a>
         </div>
-        <div class="nonono"></div>
     </div>
 
 
@@ -200,7 +199,6 @@
 
 
         function closepicdiv() {
-            document.querySelector('div.pic').style.display = 'none'
             document.querySelector('div.nonono').style.display = 'none'
             document.querySelectorAll('.pictext').forEach(e => {
                 e.value = ''
@@ -208,7 +206,6 @@
         }
 
         function picdivop() {
-            document.querySelector('div.pic').style.display = 'block'
             document.querySelector('div.nonono').style.display = 'block'
         }
         // let webselector = document.querySelector('.webselector')
