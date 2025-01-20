@@ -580,10 +580,8 @@
                     }
                     if (e) {
                         if (e.parentElement && e.parentElement.tagName !== 'DIV' && e.tagName.toLowerCase() === `${web.strongtag}` && e.parentElement.innerText === e.innerText) {
-                            console.log(e);
                             if (e.parentElement.parentElement) {
                                 e.parentElement.parentElement.replaceChild(e, e.parentElement)
-
                             } else {
                                 tempDiv.insertBefore(e, e.parentElement)
                                 e.parentElement.remove()
