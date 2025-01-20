@@ -8,7 +8,7 @@
     <style>
         body {
             background-color: #333;
-            margin: 0px;
+            margin: 0px auto;
         }
 
         div.btn {
@@ -38,6 +38,8 @@
             display: block;
         }
 
+
+
         #editableArea {
             border: 1px solid #374366;
             height: 509px;
@@ -62,6 +64,53 @@
             word-wrap: break-word;
             /* 防止长文本溢出 */
         }
+
+
+        div.pic {
+            width: 500px;
+            height: 500px;
+            background-color: #333;
+            border: 1px yellow solid;
+            margin: 0 auto;
+            position: absolute;
+            top: 30px;
+            left: 32%;
+            display: none;
+        }
+
+        div.pic a {
+            color: #fff;
+            position: absolute;
+            top: 0px;
+            display: block;
+            right: 0px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        div.piccopy {
+            margin-top: 25px;
+            padding-left: 20px;
+            display: flex;
+        }
+
+        div.piccopy span {
+            display: block;
+            color: #fff;
+            margin-right: 5px;
+        }
+
+        div.piccopy textarea {
+            width: 230px;
+            height: 18px;
+            margin-top: -3px;
+            margin-right: 5px;
+            overflow-y: hidden;
+        }
+
+        div.piccopy button {
+            margin-top: -3px;
+        }
     </style>
 </head>
 
@@ -82,10 +131,45 @@
             </select>
             <button onclick="convertToHtml()">轉換</button>
             <button class="copy">複製</button>
-            <button onclick="clearnHtml()">清除</button>
+            <button onclick="clearnHtml()" class="clearn">清除</button>
+            <button onclick="picdivop()" class="picdiv">图</button>
         </div>
         <div class="edit">
             <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>
+        </div>
+
+        <div class="pic">
+            <div class="piccopy" id='d01'>
+                <span>http://file1.sg.local</span>
+                <textarea class="pictext"></textarea>
+                <button class='copytext'>复制</button>
+                <button class='clearntext'>清除</button>
+            </div>
+            <div class="piccopy" id='d02'>
+                <span>http://file1.sg.local</span>
+                <textarea class="pictext"></textarea>
+                <button class='copytext'>复制</button>
+                <button class='clearntext'>清除</button>
+            </div>
+            <div class="piccopy" id='d03'>
+                <span>http://file1.sg.local</span>
+                <textarea class="pictext"></textarea>
+                <button class='copytext'>复制</button>
+                <button class='clearntext'>清除</button>
+            </div>
+            <div class="piccopy" id='d04'>
+                <span>http://file1.sg.local</span>
+                <textarea class="pictext"></textarea>
+                <button class='copytext'>复制</button>
+                <button class='clearntext'>清除</button>
+            </div>
+            <div class="piccopy" id='d05'>
+                <span>http://file1.sg.local</span>
+                <textarea class="pictext"></textarea>
+                <button class='copytext'>复制</button>
+                <button class='clearntext'>清除</button>
+            </div>
+            <a onclick="closepicdiv()">X</a>
         </div>
     </div>
 
@@ -96,19 +180,27 @@
     <div id="htmlOutput"></div>
     <!-- <script src="xi.js"></script> -->
     <script>
-        const redList = ['#e03e2d', 'rgb(224 62 45)', 'red']
-        const orangeList = ['#c45911', '#ed7d31', 'rgb(254,152,42)', 'rgb(237,125,49)','rgb(247,150,70)']
+        const redList = ['#e03e2d', 'rgb(224,62,45)', 'red']
+        const orangeList = ['#c45911', '#ed7d31', 'rgb(254,152,42)', 'rgb(237,125,49)', 'rgb(247,150,70)']
         const noMarkList = ['white', 'whitesmoke', 'rgb(51,51,51)', 'rgb(61, 67, 70)', 'rgb(50,50,50)', 'black', '#333', '#333333', '#fff', '#ffffff', '#323232', 'windowtext']
 
 
 
+        function closepicdiv() {
+            document.querySelector('div.pic').style.display = 'none'
+        }
 
+        function picdivop() {
+            document.querySelector('div.pic').style.display = 'block'
+        }
         // let webselector = document.querySelector('.webselector')
         // webselector.addEventListener('change', (e) => {
         //     localStorage.setItem('web', e.target.value)
         // })
 
         let copyBtn = document.querySelector('.copy')
+
+
 
 
         function convertToHtml() {
@@ -713,11 +805,15 @@
             //document.getElementById("htmlOutput").innerHTML = cleanedContent;
 
             //開啟複製按鈕
-             copyBtn.classList.add('on')
-          
+
+            copyBtn.classList.add('on')
+
+
+
+
+
+
         }
-
-
         copyBtn.addEventListener('click', function () {
 
             copyBtn.setAttribute('disabled', '')
@@ -726,12 +822,28 @@
             setTimeout(() => copyBtn.removeAttribute('disabled'), 3000);
 
         });
+
+
+
+
         function clearnHtml() {
             document.getElementById("editableArea").innerHTML = ''
             document.getElementById("htmlOutput").innerHTML = ''
-            document.querySelector('.copy').classList.remove('on')
+            copyBtn.classList.remove('on')
         }
 
+        document.querySelector('div.pic').addEventListener('click', e => {
+            if (e.target.tagName = 'BUTTON' && e.target.className === 'clearntext') {
+                console.log(e.parentElement);
+                document.querySelector(`[id=${e.target.parentElement.id}] .pictext`).value = ''
+            }
+            if (e.target.tagName = 'BUTTON' && e.target.className === 'copytext') {
+                let picstr = document.querySelector(`[id=${e.target.parentElement.id}] .pictext`).value
+                let copytextstr = `http://file1.sg.local${picstr}`
+                navigator.clipboard.writeText(copytextstr)
+                alert('链接已复制')
+            }
+        })
 
     </script>
 </body>
