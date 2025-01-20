@@ -77,6 +77,8 @@
                 <option value="bwin">bwin</option>
                 <option value="bwyl">bwyl</option>
                 <option value="bwylg">bwylg</option>
+                <option value="bet">bet</option>
+                <option value="bwwns">bwwns</option>
             </select>
             <button onclick="convertToHtml()">轉換</button>
             <button onclick="convertToHtml()" class="copy">複製</button>
@@ -161,6 +163,30 @@
                     strongclasscolor: false,
                     tableBgStr: '',
                     tableAttribute: ['100%', '1', '1', '0']
+
+                }
+            }else if (web === 'bet') {
+                web = {
+                    trcolor: 'feise-bg',
+                    strongtag: 'strong',
+                    strongcolor: '',
+                    spancolor: 'red',
+                    emcolor: 'orange2',
+                    strongclasscolor: false,
+                    tableBgStr: '',
+                    tableAttribute: ['100%', '1', '0', '0']
+
+                }
+            }else if (web === 'bwwns') {
+                web = {
+                    trcolor: 'topcolor',
+                    strongtag: 'strong',
+                    strongcolor: '',
+                    spancolor: 'red',
+                    emcolor: 'red',
+                    strongclasscolor: false,
+                    tableBgStr: '',
+                    tableAttribute: ['100%', '1', '0', '0']
 
                 }
             }
