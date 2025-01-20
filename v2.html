@@ -81,7 +81,7 @@
                 <option value="bwwns">bwwns</option>
             </select>
             <button onclick="convertToHtml()">轉換</button>
-            <button onclick="convertToHtml()" class="copy">複製</button>
+            <button class="copy">複製</button>
             <button onclick="clearnHtml()">清除</button>
         </div>
         <div class="edit">
@@ -108,7 +108,7 @@
         //     localStorage.setItem('web', e.target.value)
         // })
 
-
+        let copyBtn = document.querySelector('.copy')
 
 
         function convertToHtml() {
@@ -713,16 +713,19 @@
             //document.getElementById("htmlOutput").innerHTML = cleanedContent;
 
             //開啟複製按鈕
-            document.querySelector('.copy').classList.add('on')
-
-
-
-            document.querySelector('.copy').addEventListener('click', function () {
-                navigator.clipboard.writeText(document.getElementById("htmlOutput").textContent)
-                alert('代碼已複製！');
-            });
+             copyBtn.classList.add('on')
+          
         }
 
+
+        copyBtn.addEventListener('click', function () {
+
+            copyBtn.setAttribute('disabled', '')
+            navigator.clipboard.writeText(document.getElementById("htmlOutput").textContent)
+            alert('代碼已複製！');
+            setTimeout(() => copyBtn.removeAttribute('disabled'), 3000);
+
+        });
         function clearnHtml() {
             document.getElementById("editableArea").innerHTML = ''
             document.getElementById("htmlOutput").innerHTML = ''
