@@ -102,7 +102,7 @@
 
 
 
-       // let webselector = document.querySelector('.webselector')
+        // let webselector = document.querySelector('.webselector')
         // webselector.addEventListener('change', (e) => {
         //     localStorage.setItem('web', e.target.value)
         // })
@@ -165,7 +165,7 @@
                     tableAttribute: ['100%', '1', '1', '0']
 
                 }
-            }else if (web === 'bet') {
+            } else if (web === 'bet') {
                 web = {
                     trcolor: 'feise-bg',
                     strongtag: 'strong',
@@ -177,7 +177,7 @@
                     tableAttribute: ['100%', '1', '0', '0']
 
                 }
-            }else if (web === 'bwwns') {
+            } else if (web === 'bwwns') {
                 web = {
                     trcolor: 'topcolor',
                     strongtag: 'strong',
@@ -579,7 +579,6 @@
                         titleTF = true
                     }
                     if (e) {
-
                         if (e.parentElement && e.parentElement.tagName !== 'DIV' && e.tagName.toLowerCase() === `${web.strongtag}` && e.parentElement.innerText === e.innerText) {
                             console.log(e);
                             if (e.parentElement.parentElement) {
@@ -699,7 +698,7 @@
                             newEm.className = e.className
                         }
                         newEm.innerHTML = e.innerHTML
-                        e.parentElement.replaceChild(newEm,e)
+                        e.parentElement.replaceChild(newEm, e)
                         sapn3TF = true
                     }
                 })
