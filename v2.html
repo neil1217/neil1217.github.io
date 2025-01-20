@@ -592,19 +592,19 @@
                 // 獲取該 <tr> 下所有的 <td>
                 const tdElements = tr.querySelectorAll('td');
                 // 檢查所有 <td> 是否都有 class="red"
-                const allRed = Array.from(tdElements).every(td => td.classList.contains('red'));
+                const allRed = Array.from(tdElements).every(td => td.classList.contains(`${web.trcolor}`));
 
-                // 如果所有的 <td> 都有 class="red"
+                // 如果所有的 <td> 都有 class=`${web.trcolor}`
                 if (allRed) {
                     // 刪除所有 <td> 元素
                     tdElements.forEach(td => {
-                        td.classList.remove('red')
+                        td.classList.remove(`${web.trcolor}`)
                         if (td.className === '') {
                             td.removeAttribute('class')
                         }
                     });
                     // 在 <tr> 上添加 class="red"
-                    tr.classList.add('red');
+                    tr.classList.add(`${web.trcolor}`);
                 }
             });
 
