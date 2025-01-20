@@ -110,12 +110,15 @@
         }
 
         div.piccopy textarea {
-            width: 230px;
+           width: 230px;
             height: 18px;
             margin-top: -3px;
             margin-right: 5px;
-            overflow-y: hidden;
-            resize:none;
+            overflow: hidden;
+            resize: none;
+            text-overflow: ellipsis;
+            display: inline-block;
+            white-space: nowrap;
         }
 
         div.piccopy button {
