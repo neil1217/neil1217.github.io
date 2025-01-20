@@ -75,7 +75,7 @@
 
 
         div.pic {
-            width: 500px;
+            width: 600px;
             height: 500px;
             background-color: #333;
             border: 5px #008cf399 solid;
@@ -177,31 +177,31 @@
         <div class="nonono">
             <div class="pic">
                 <div class="piccopy" id='d01'>
-                    <span>http://file1.sg.local</span>
+                    <span>&lt;img src="http://file1.sg.local</span>
                     <textarea class="pictext"></textarea>
                     <button class='copytext'>复制</button>
                     <button class='clearntext'>清除</button>
                 </div>
                 <div class="piccopy" id='d02'>
-                    <span>http://file1.sg.local</span>
+                    <span>&lt;img src="http://file1.sg.local</span>
                     <textarea class="pictext"></textarea>
                     <button class='copytext'>复制</button>
                     <button class='clearntext'>清除</button>
                 </div>
                 <div class="piccopy" id='d03'>
-                    <span>http://file1.sg.local</span>
+                    <span>&lt;img src="http://file1.sg.local</span>
                     <textarea class="pictext"></textarea>
                     <button class='copytext'>复制</button>
                     <button class='clearntext'>清除</button>
                 </div>
                 <div class="piccopy" id='d04'>
-                    <span>http://file1.sg.local</span>
+                    <span>&lt;img src="http://file1.sg.local</span>
                     <textarea class="pictext"></textarea>
                     <button class='copytext'>复制</button>
                     <button class='clearntext'>清除</button>
                 </div>
                 <div class="piccopy" id='d05'>
-                    <span>http://file1.sg.local</span>
+                    <span>&lt;img src="http://file1.sg.local</span>
                     <textarea class="pictext"></textarea>
                     <button class='copytext'>复制</button>
                     <button class='clearntext'>清除</button>
@@ -912,7 +912,7 @@
             }
             if (e.target.tagName = 'BUTTON' && e.target.className === 'copytext') {
                 let picstr = document.querySelector(`[id=${e.target.parentElement.id}] .pictext`).value
-                let copytextstr = `http://file1.sg.local${picstr}`
+                let copytextstr = `<img src="http://file1.sg.local${picstr}">`
                 navigator.clipboard.writeText(copytextstr)
                 alert('链接已复制')
             }
