@@ -323,7 +323,7 @@
                             } else if (est.startsWith('background-color:')) {
                                 tdBgStr = est.replace('background-color:', '')
                             }
-                            if (web.tableBgStr !== tdBgStr && tdBgStr !== '') {
+                            if (tdBgStr !== '' && noMarkList.indexOf(tdBgStr) === -1) {
                                 ele.classList.add(`${web.trcolor}`)
                                 return false
                             }
