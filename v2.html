@@ -98,18 +98,23 @@
 
 
 
-        let webselector = document.querySelector('.webselector')
-        webselector.addEventListener('change', (e) => {
-            localStorage.setItem('web', e.target.value)
-        })
+       // let webselector = document.querySelector('.webselector')
+        // webselector.addEventListener('change', (e) => {
+        //     localStorage.setItem('web', e.target.value)
+        // })
 
 
 
 
         function convertToHtml() {
 
-            localStorage.setItem('web', 'web0')
-            let web = localStorage.getItem('web')
+            //localStorage.setItem('web', 'web0')
+
+
+            web = document.querySelector('.webselector').value
+
+            console.log(web);
+            //let web = localStorage.getItem('web')
             if (web === 'web0') {
                 web = {
                     trcolor: 'red',
@@ -123,7 +128,7 @@
                 }
             } else if (web === 'bwin') {
                 web = {
-                    trcolor: 'red',
+                    trcolor: 'topcolor',
                     strongtag: 'strong',
                     strongcolor: 'orange2',
                     spancolor: 'red',
@@ -134,14 +139,26 @@
                 }
             } else if (web === 'blm') {
                 web = {
-                    trcolor: 'red',
+                    trcolor: 'bg333',
                     strongtag: 'strong',
                     strongcolor: '',
                     spancolor: 'red',
-                    emcolor: 'orange2',
-                    strongclasscolor: true,
+                    emcolor: 'red',
+                    strongclasscolor: false,
                     tableBgStr: '',
                     tableAttribute: ['100%', '1', '0', '0']
+
+                }
+            } else if (web === 'bwyl') {
+                web = {
+                    trcolor: 'tabtop',
+                    strongtag: 'strong',
+                    strongcolor: '',
+                    spancolor: 'red',
+                    emcolor: 'red',
+                    strongclasscolor: false,
+                    tableBgStr: '',
+                    tableAttribute: ['100%', '1', '1', '0']
 
                 }
             }
