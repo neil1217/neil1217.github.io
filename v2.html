@@ -822,7 +822,7 @@
                     }
                 })
                 eTr[tdindex].querySelectorAll('td').forEach(etr => {
-                    etr.style.cssText += `width:${100 / trcount}%;`
+                   etr.style.cssText += `width:${Math.floor((100 / trcount) * 10) / 10}%;`
                 })
             })
 
