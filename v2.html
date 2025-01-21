@@ -656,7 +656,7 @@
                 aTF = false
                 const aAll = tempDiv.querySelectorAll('a')
                 aAll.forEach(e => {
-
+                    e.setAttribute('target', '_blank')
                     aKid = e.childNodes
                     for (let i = aKid.length - 1; i > 0; i--) {
                         const a = aKid[i]
