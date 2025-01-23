@@ -398,6 +398,8 @@
             content = content.replace(/<o:p><\/o:p>/g, '');
             content = content.replace(/&nbsp;/g, '')
             content = content.replace(/' '/g, '')
+            content = content.replace(/\n/g, '')
+            content = content.replace(/<br>/g, '<\/p>\n<p>')
             content = content.replace(/\<!--[\s\S]*?--\>/g, '');
             content = content.replace(/style/g, ' style');
             content = content.replace(/src/g, ' src');
