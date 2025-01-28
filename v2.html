@@ -382,9 +382,13 @@ function closetextdiv() {
 
         copytag.addEventListener('click', e => {
             if (e.target.tagName === 'BUTTON') {
+                document.querySelectorAll('.daily p').forEach(e => {
+                    e.removeAttribute('style')
+                })
                 let str = e.target.parentElement.innerText.replace('复制', '')
                 navigator.clipboard.writeText(str)
-                document.querySelector('.copything').innerText = '你复制的是  ' + str
+                e.target.parentElement.style.cssText = 'color:red;'
+                //document.querySelector('.copything').innerText = '你复制的是  ' + str
             }
         })
 
