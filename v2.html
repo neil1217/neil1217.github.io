@@ -1046,8 +1046,8 @@ div.text {
                 document.querySelector(`[id=${e.target.parentElement.id}] .textin`).value = ''
             }
             if (e.target.tagName = 'BUTTON' && e.target.className === 'copytext') {
-                let picstr = document.querySelector(`[id=${e.target.parentElement.id}] .textin`).value
-                let copytextstr = picstr
+                let textstr = document.querySelector(`[id=${e.target.parentElement.id}] .textin`).value
+                let copytextstr = textstr
                 navigator.clipboard.writeText(copytextstr)
                 alert('链接已复制')
             }
