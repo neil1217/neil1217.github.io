@@ -884,8 +884,6 @@
 
             cleanedContent = tempDiv.innerHTML
 
-            cleanedContent = cleanedContent.replace(/</g, '\n<')
-            cleanedContent = cleanedContent.replace(/>/g, '>\n')
             // 显示为纯文本形式，不渲染 HTML
             document.getElementById("htmlOutput").textContent = cleanedContent;
             //渲染
