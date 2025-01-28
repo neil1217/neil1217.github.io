@@ -1037,13 +1037,20 @@ function closetextdiv() {
         }
 
         document.querySelector('div.pic').addEventListener('click', e => {
+            let allPicText = document.querySelectorAll('.pictext')
             if (e.target.tagName = 'BUTTON' && e.target.className === 'clearntext') {
-                console.log(e.parentElement);
+                allPicText.forEach(e => {
+                    e.removeAttribute('style')
+                })
                 document.querySelector(`[id=${e.target.parentElement.id}] .pictext`).value = ''
             }
             if (e.target.tagName = 'BUTTON' && e.target.className === 'copytext') {
-                let picstr = document.querySelector(`[id=${e.target.parentElement.id}] .pictext`).value
-                let copytextstr = `<img src="http://file1.sg.local${picstr}">`
+                allPicText.forEach(e => {
+                    e.removeAttribute('style')
+                })
+                let picstr = document.querySelector(`[id=${e.target.parentElement.id}] .pictext`)
+                picstr.style.cssText = 'color:red;'
+                let copytextstr = `<img src="http://file1.sg.local${picstr.value}">`
                 navigator.clipboard.writeText(copytextstr)
                 //alert('链接已复制')
             }
