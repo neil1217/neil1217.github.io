@@ -553,12 +553,13 @@
             }
 
 
-            let spanTF = true
+          let spanTF = true
             while (spanTF) {
                 spanTF = false
                 let spanAll = tempDiv.querySelectorAll('span')
                 spanAll.forEach(e => {
-                    if (!e.hasAttributes()) {
+                    console.log(e.parentElement.className);
+                    if (!e.hasAttributes() && e.parentElement.className !== 'outout') {
                         let removeTF = false
                         while (e.firstChild) {
                             e.parentElement.insertBefore(e.firstChild, e)
@@ -568,6 +569,13 @@
                             e.remove()
                             spanTF = true
                         }
+                    } else if (!e.hasAttributes() && e.parentElement.className === 'outout') {
+                        const newP = document.createElement('p')
+                        newP.innerHTML = e.innerHTML
+                        e.parentElement.insertBefore(newP, e)
+                        e.remove()
+                        spanTF = true
+
                     }
                 })
             }
@@ -872,7 +880,8 @@
 
             cleanedContent = tempDiv.innerHTML
 
-            cleanedContent= cleanedContent.replace('/</p>/g','</p>\n')
+            cleanedContent = cleanedContent.replace(/</g, '\n<')
+            cleanedContent = cleanedContent.replace(/>/g, '>\n')
             // 显示为纯文本形式，不渲染 HTML
             document.getElementById("htmlOutput").textContent = cleanedContent;
             //渲染
