@@ -337,15 +337,12 @@ div.text {
         const orangeList = ['#c45911', '#ed7d31', 'rgb(254,152,42)', 'rgb(237,125,49)', 'rgb(247,150,70)', 'rgb(247, 150, 70)']
         const noMarkList = ['white', 'whitesmoke', 'rgb(51,51,51)', 'rgb(61, 67, 70)', 'rgb(50,50,50)','rgb(71,71,71)', 'black', '#333', '#333333', '#fff', '#ffffff', '#323232', 'windowtext']
 
-
-
         function closepicdiv() {
             document.querySelector('div.nonono').style.display = 'none'
             document.querySelectorAll('.pictext').forEach(e => {
                 e.value = ''
             })
         }
-
         function picdivop() {
             document.querySelector('div.nonono').style.display = 'block'
         }
@@ -353,6 +350,17 @@ div.text {
         // webselector.addEventListener('change', (e) => {
         //     localStorage.setItem('web', e.target.value)
         // })
+
+
+function closetextdiv() {
+            document.querySelector('div.nononotext').style.display = 'none'
+            document.querySelectorAll('.textin').forEach(e => {
+                e.value = ''
+            })
+        }
+        function textdivop() {
+            document.querySelector('div.nononotext').style.display = 'block'
+        }
 
         let copyBtn = document.querySelector('.copy')
         let copytag = document.querySelector('.daily')
