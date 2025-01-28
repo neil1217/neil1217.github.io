@@ -72,7 +72,16 @@
             background-color: #000000e3;
             z-index: 2;
         }
-
+div.nononotext {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background-color: #000000e3;
+            z-index: 2;
+        }
 
         div.pic {
             width: 600px;
@@ -122,7 +131,54 @@
         div.piccopy button {
             margin-top: -3px;
         }
+div.text {
+            width: 600px;
+            height: 500px;
+            background-color: #333;
+            border: 5px #008cf399 solid;
+            margin: 30px auto 0px auto;
+            z-index: 3;
+            position: relative;
+        }
 
+        div.text a {
+            color: #fff;
+            position: absolute;
+            top: -22px;
+            display: block;
+            right: -35px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 50px;
+        }
+
+        div.textcopy {
+            margin-top: 25px;
+            padding-left: 20px;
+            display: flex;
+        }
+
+        div.textcopy span {
+            display: block;
+            color: #fff;
+            margin-right: 5px;
+        }
+
+        div.textcopy textarea {
+            width: 450px;
+            height: 18px;
+            margin-top: -3px;
+            margin-right: 5px;
+            overflow: hidden;
+            resize: none;
+            text-overflow: ellipsis;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        div.textcopy button {
+            margin-top: -3px;
+        }
         div.daily {
             width: 280px;
             background-color: #222222;
@@ -168,6 +224,7 @@
             <button class="copy">複製</button>
             <button onclick="clearnHtml()" class="clearn">清除</button>
             <button onclick="picdivop()" class="picdiv">图</button>
+            <button onclick="textdivop()" class="textdiv">剪贴簿</button>
         </div>
         <div class="edit">
             <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>
@@ -208,6 +265,51 @@
                 </div>
                 
                 <a onclick="closepicdiv()">×</a>
+            </div>
+        </div>
+         <div class="nononotext">
+            <div class="text">
+                <div class="textcopy" id='d01'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="textcopy" id='d02'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="textcopy" id='d03'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="textcopy" id='d04'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="textcopy" id='d05'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="textcopy" id='d06'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="textcopy" id='d07'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <div class="textcopy" id='d08'>
+                    <textarea class="textin"></textarea>
+                    <button class='copytext'>复制</button>
+                    <button class='clearntext'>清除</button>
+                </div>
+                <a onclick="closetextdiv()">×</a>
             </div>
         </div>
 
@@ -934,6 +1036,18 @@
             if (e.target.tagName = 'BUTTON' && e.target.className === 'copytext') {
                 let picstr = document.querySelector(`[id=${e.target.parentElement.id}] .pictext`).value
                 let copytextstr = `<img src="http://file1.sg.local${picstr}">`
+                navigator.clipboard.writeText(copytextstr)
+                alert('链接已复制')
+            }
+        })
+        document.querySelector('div.text').addEventListener('click', e => {
+            if (e.target.tagName = 'BUTTON' && e.target.className === 'clearntext') {
+                console.log(e.parentElement);
+                document.querySelector(`[id=${e.target.parentElement.id}] .textin`).value = ''
+            }
+            if (e.target.tagName = 'BUTTON' && e.target.className === 'copytext') {
+                let picstr = document.querySelector(`[id=${e.target.parentElement.id}] .textin`).value
+                let copytextstr = picstr
                 navigator.clipboard.writeText(copytextstr)
                 alert('链接已复制')
             }
