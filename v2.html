@@ -883,6 +883,7 @@
 
 
             cleanedContent = tempDiv.innerHTML
+            cleanedContent = cleanedContent.replace(/<\/strong>/g, '<\/strong>\n');
            cleanedContent = cleanedContent.replace(/<\/table([^>]*)>/g, '<\/table$1>\n');
             cleanedContent = cleanedContent.replace(/<tbody([^>]*)>/g, '\n<tbody$1>\n');
             cleanedContent = cleanedContent.replace(/<\/tbody([^>]*)>/g, '<\/tbody$1>\n');
