@@ -1011,7 +1011,17 @@ function closetextdiv() {
                 })
             }
 
-
+            //20251014   strong外層p去除
+            tempDiv.querySelectorAll('p').forEach(p => {
+                // 1. 只能有一个节点
+                if (p.childNodes.length !== 1) return;
+                const strong = p.firstElementChild;
+                // 2. 必须是 <strong>（不管有没有 class、写什么文字）
+                if (!strong || strong.tagName !== 'STRONG') return;
+                // 3. 直接替换
+                p.parentElement.replaceChild(strong, p);
+            });
+            //20251014   strong外層p去除
 
 
             cleanedContent = tempDiv.innerHTML
@@ -1101,3 +1111,4 @@ function closetextdiv() {
 </body>
 
 </html>
+
