@@ -1011,7 +1011,7 @@ function closetextdiv() {
                 })
             }
 
-            //20251014   strong外層p去除
+            //20251014_strong外層p去除
             tempDiv.querySelectorAll('p').forEach(p => {
                 // 1. 只能有一个节点
                 if (p.childNodes.length !== 1) return;
@@ -1021,19 +1021,22 @@ function closetextdiv() {
                 // 3. 直接替换
                 p.parentElement.replaceChild(strong, p);
             });
-            //20251014   strong外層p去除
+            //20251014_strong外層p去除_end
 
 
+            //换行方便察看
             cleanedContent = tempDiv.innerHTML
-            cleanedContent = cleanedContent.replace(/<\/strong>/g, '<\/strong>\n');
-           cleanedContent = cleanedContent.replace(/<\/table([^>]*)>/g, '<\/table$1>\n');
-            cleanedContent = cleanedContent.replace(/<tbody([^>]*)>/g, '\n<tbody$1>\n');
-            cleanedContent = cleanedContent.replace(/<\/tbody([^>]*)>/g, '<\/tbody$1>\n');
-            cleanedContent = cleanedContent.replace(/<tr([^>]*)>/g, '<tr$1>\n');
-            cleanedContent = cleanedContent.replace(/<\/tr>/g, '<\/tr>\n')
-            cleanedContent = cleanedContent.replace(/<td([^>]*)>/g, '<td$1>\n');
-            cleanedContent = cleanedContent.replace(/<\/td>/g, '\n<\/td>\n')
-            cleanedContent = cleanedContent.replace(/<\/p>/g, '<\/p>\n')
+                .replace(/<\/strong>/g, '</strong>\n')
+                .replace(/<\/table\b[^>]*>/g, '</table>\n')
+                .replace(/<tbody\b[^>]*>/g, '\n<tbody>\n')
+                .replace(/<\/tbody\b[^>]*>/g, '</tbody>\n')
+                .replace(/<tr\b[^>]*>/g, '<tr>\n')
+                .replace(/<\/tr>/g, '</tr>\n')
+                .replace(/<td\b[^>]*>/g, '<td>\n')
+                .replace(/<\/td>/g, '\n</td>\n')
+                .replace(/<\/p>/g, '</p>\n')
+                .replace(/<img[^>]*>/g, '$&\n');
+            //换行方便察看end
 
             // 显示为纯文本形式，不渲染 HTML
             document.getElementById("htmlOutput").textContent = cleanedContent;
@@ -1111,4 +1114,5 @@ function closetextdiv() {
 </body>
 
 </html>
+
 
