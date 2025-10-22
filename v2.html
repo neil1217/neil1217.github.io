@@ -1033,7 +1033,7 @@ function closetextdiv() {
                 .replace(/<\/table\b[^>]*>/g, '</table>\n')
                 .replace(/<tbody\b[^>]*>/g, '\n<tbody>\n')
                 .replace(/<\/tbody\b[^>]*>/g, '</tbody>\n')
-                .replace(/<tr\b[^>]*>/g, '$1\n')
+                .replace(/(<tr\b[^>]*>)/g, '$1\n')
                 .replace(/<\/tr>/g, '</tr>\n')
                 .replace(/(<td\b[^>]*>)/g, '$1\n')
                 .replace(/<\/td>/g, '\n</td>\n')
@@ -1117,6 +1117,7 @@ function closetextdiv() {
 </body>
 
 </html>
+
 
 
 
