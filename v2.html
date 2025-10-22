@@ -908,7 +908,6 @@ function closetextdiv() {
 
 
 
-            console.log(tempDiv)
 
 
 
@@ -941,7 +940,7 @@ function closetextdiv() {
                 }
             });
 
-            console.log(tempDiv)
+            
 
             tableAll = tempDiv.querySelectorAll('table')
             tableAll.forEach(e => {
@@ -1028,14 +1027,15 @@ function closetextdiv() {
 
 
             //换行方便察看
+            console.log(tempDiv)
             cleanedContent = tempDiv.innerHTML
                 .replace(/<\/strong>/g, '</strong>\n')
                 .replace(/<\/table\b[^>]*>/g, '</table>\n')
                 .replace(/<tbody\b[^>]*>/g, '\n<tbody>\n')
                 .replace(/<\/tbody\b[^>]*>/g, '</tbody>\n')
-                .replace(/<tr\b[^>]*>/g, '<tr>\n')
+                .replace(/<tr\b[^>]*>/g, '$1\n')
                 .replace(/<\/tr>/g, '</tr>\n')
-                .replace(/<td\b[^>]*>/g, '<td>\n')
+                .replace(/(<td\b[^>]*>)/g, '$1\n')
                 .replace(/<\/td>/g, '\n</td>\n')
                 .replace(/<\/p>/g, '</p>\n')
                 .replace(/<img[^>]*>/g, '$&\n');
@@ -1117,6 +1117,7 @@ function closetextdiv() {
 </body>
 
 </html>
+
 
 
 
