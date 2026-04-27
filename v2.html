@@ -22,6 +22,7 @@
         div.edit {
             width: 900px;
             margin: 0 auto;
+            display: flex;
         }
 
         button {
@@ -43,7 +44,7 @@
         #editableArea {
             border: 1px solid #374366;
             height: 509px;
-            width: 100%;
+            width: 50%;
             background-color: #f9f9f9;
             overflow-x: auto;
             margin: 0 auto;
@@ -61,6 +62,13 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+        #htmlOutput2 {
+           width: 50%;
+        height: 509px; 
+        }
+
+
+        
 
         div.nonono {
             width: 100%;
@@ -228,6 +236,7 @@ div.text {
         </div>
         <div class="edit">
             <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>
+            <input id="htmlOutput2" style="width: 50%;height: 509px;">
         </div>
 
 
@@ -1044,7 +1053,7 @@ function closetextdiv() {
             // 显示为纯文本形式，不渲染 HTML
             document.getElementById("htmlOutput").textContent = cleanedContent;
             //渲染
-            //document.getElementById("htmlOutput").innerHTML = cleanedContent;
+            document.getElementById("htmlOutput2").innerHTML = cleanedContent;
 
             //開啟複製按鈕
 
