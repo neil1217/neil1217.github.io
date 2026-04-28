@@ -43,8 +43,8 @@
 
         #editableArea {
             border: 1px solid #374366;
-            height: 509px;
-            width: 50%;
+            height: 109px;
+            width: 100%;
             background-color: #f9f9f9;
             overflow-x: auto;
             margin: 0 auto;
@@ -62,10 +62,7 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
-        #htmlOutput2 {
-           width: 50%;
-        height: 509px; 
-        }
+        
 
 
         
@@ -235,8 +232,7 @@ div.text {
             <button onclick="textdivop()" class="textdiv">剪贴簿</button>
         </div>
         <div class="edit">
-            <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>
-            <textarea id="htmlOutput2" style="width: 50%;height: 509px;"></textarea>
+            <div id="editableArea" contenteditable="true" placeholder="貼上WORD"></div>           
            
         </div>
 
@@ -357,7 +353,7 @@ div.text {
 
 
 
-    <div id="htmlOutput"></div>
+    <textarea id="htmlOutput" style="width: 1550px;height: 340px;"></textarea>
     <!-- <script src="xi.js"></script> -->
     <script>
         const redList = ['#e03e2d', 'rgb(224,62,45)', 'red']
