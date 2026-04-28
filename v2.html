@@ -402,7 +402,9 @@ function closetextdiv() {
                
                // 判断父元素是否有 needSpacek class
                if (e.target.parentElement.classList.contains('needSpacek')) {
+                    console.log("保留");
                    navigator.clipboard.writeText(str)  // 不 trim
+                   
                } else {
                    navigator.clipboard.writeText(str.trim())  // 正常 trim
                }
