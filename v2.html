@@ -1067,7 +1067,7 @@ function closetextdiv() {
         copyBtn.addEventListener('click', function () {
 
             copyBtn.setAttribute('disabled', '')
-            navigator.clipboard.writeText(document.getElementById("htmlOutput").textContent)
+            navigator.clipboard.writeText(document.getElementById("htmlOutput").value)
             alert('代碼已複製！');
             setTimeout(() => copyBtn.removeAttribute('disabled'), 2000);
 
