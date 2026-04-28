@@ -348,7 +348,7 @@ div.text {
             <p>style="width:100%;"<button class='copytag'>复制</button></p>       
             <p>&lt;strong&gt;<button class='copytag'>复制</button></p>  
              <p>&lt;/strong&gt;<button class='copytag'>复制</button></p>
-             <p> class="pTxt"<button class='copytag'>复制</button></p> 
+             <p class="needSpacek"> class="pTxt"<button class='copytag'>复制</button></p> 
             <p>&lt;p class="pTxt"&gt;<button class='copytag'>复制</button></p>  
             <p class="copything"></p>
         </div>
@@ -394,16 +394,22 @@ function closetextdiv() {
         let copytag = document.querySelector('.daily')
 
         copytag.addEventListener('click', e => {
-            if (e.target.tagName === 'BUTTON') {
-                document.querySelectorAll('.daily p').forEach(e => {
-                    e.removeAttribute('style')
-                })
-                let str = e.target.parentElement.innerText.replace('复制', '')
-                navigator.clipboard.writeText(str.trim())
-                e.target.parentElement.style.cssText = 'color:red;'
-                //document.querySelector('.copything').innerText = '你复制的是  ' + str
-                console.log(str);
-            }
+           if (e.target.tagName === 'BUTTON') {
+               document.querySelectorAll('.daily p').forEach(e => {
+                   e.removeAttribute('style')
+               })
+               let str = e.target.parentElement.innerText.replace('复制', '')
+               
+               // 判断父元素是否有 needSpacek class
+               if (e.target.parentElement.classList.contains('needSpacek')) {
+                   navigator.clipboard.writeText(str)  // 不 trim
+               } else {
+                   navigator.clipboard.writeText(str.trim())  // 正常 trim
+               }
+               
+               e.target.parentElement.style.cssText = 'color:red;'
+               console.log(str);
+           }
         })
 
 
