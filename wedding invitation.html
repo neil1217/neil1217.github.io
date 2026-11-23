@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>明儒 & 雅雯 婚禮電子喜帖 | Wedding Invitation</title>
+  
+  <!-- 載入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- 載入 Google Fonts：優雅襯線體 (Noto Serif TC, Cormorant Garamond) 與無襯線體 (Noto Sans TC) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind 自訂色票與字體設定 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: '#FAF7F2',       /* 暖象牙白主背景 */
+            champagne: '#C5A880',   /* 香檳金點綴色 */
+            champagneDark: '#A6885E',
+            charcoal: '#2C2926',    /* 深炭灰主文字 */
+            warmGray: '#6E6962',    /* 暖灰次要文字 */
+            sand: '#EFECE6',        /* 柔和米沙色區塊 */
+          },
+          fontFamily: {
+            serifTC: ['"Noto Serif TC"', 'serif'],
+            serifEN: ['"Cormorant Garamond"', 'serif'],
+            sansTC: ['"Noto Sans TC"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 全局平滑滾動與細緻暖紙張質感背景 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #FAF7F2;
+      background-image: radial-gradient(#C5A88022 0.75px, transparent 0.75px);
+      background-size: 20px 20px;
+      color: #2C2926;
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ============================================================
+       [開場互動簾幕樣式] 橫式左右對開照片動畫設定
+       ============================================================ */
+    #curtain-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      width: 100vw;
+      height: 100dvh;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    /* 左右兩側照片容器：各佔 50vw x 100vh，使用 1.1s 絲滑緩動 */
+    .curtain-panel {
+      position: relative;
+      width: 50vw;
+      height: 100%;
+      overflow: hidden;
+      transition: transform 1.1s cubic-bezier(0.77, 0, 0.175, 1);
+      will-change: transform;
+      background-color: #E8E2D7;
+    }
+
+    .curtain-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 6s ease-out;
+    }
+
+    #curtain-overlay:not(.opened) .curtain-panel img {
+      transform: scale(1.03);
+    }
+
+    /* 左側照片向左滑出 */
+    #curtain-overlay.opened .curtain-left {
+      transform: translateX(-100%);
+    }
+
+    /* 右側照片向右滑出 */
+    #curtain-overlay.opened .curtain-right {
+      transform: translateX(100%);
+    }
+
+    /* 中央金色分隔線與點擊提示徽章 */
+    .curtain-center-ui {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    #curtain-overlay.opened .curtain-center-ui {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    /* 中央細緻香檳金中線 */
+    .gold-divider-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        rgba(197, 168, 128, 0.1) 0%,
+        rgba(197, 168, 128, 0.9) 35%,
+        rgba(197, 168, 128, 0.9) 65%,
+        rgba(197, 168, 128, 0.1) 100%
+      );
+      transform: translateX(-50%);
+      transition: opacity 0.3s ease;
+    }
+
+    #curtain-overlay.opened .gold-divider-line {
+      opacity: 0;
+    }
+
+    @keyframes pulseGentle {
+      0%, 100% { opacity: 0.88; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-3px); }
+    }
+    .animate-pulse-gentle {
+      animation: pulseGentle 2.4s infinite ease-in-out;
+    }
+
+    /* 主內容進場淡入效果 */
+    .main-reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.95s ease 0.35s, transform 0.95s ease 0.35s;
+    }
+    body.invitation-revealed .main-reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="font-sansTC antialiased selection:bg-champagne/20 selection:text-charcoal">
+
+  <!-- =====================================================================
+       1. 開場互動遮罩（橫式左右對開照片簾幕）
+       點擊螢幕任意位置，左側向左滑出、右側向右滑出 (1.1s)
+       ===================================================================== -->
+  <div id="curtain-overlay" role="button" tabindex="0" aria-label="點擊任意位置開啟電子喜帖">
+    
+    <!-- 左側照片區塊 (50vw x 100vh) -->
+    <div class="curtain-panel curtain-left">
+      <!-- 【可替換橫式開場左側照片】：建議使用橫向或寬幅婚紗照 -->
+      <img 
+        src="https://i.imgur.com/mCukcDt.jpeg" 
+        alt="婚紗照左側"
+        onerror="this.src='https://placehold.co/1200x900/EAE3D5/8C734B?text=Left+Landscape+Photo'"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/35"></div>
+    </div>
+
+    <!-- 右側照片區塊 (50vw x 100vh) -->
+    <div class="curtain-panel curtain-right">
+      <!-- 【可替換橫式開場右側照片】：建議使用橫向或寬幅婚紗照 -->
+      <img 
+        src="https://i.imgur.com/RWwoL7S.jpeg" 
+        alt="婚紗照右側"
+        onerror="this.src='https://placehold.co/1200x900/E5DDD0/8C734B?text=Right+Landscape+Photo'"
+      />
+      <div class="absolute inset-0 bg-gradient-to-l from-black/15 via-transparent to-black/35"></div>
+    </div>
+
+    <!-- 中央細緻香檳金中線 -->
+    <div class="gold-divider-line"></div>
+
+    <!-- 中央新人縮寫徽章與浮動點擊提示 -->
+    <div class="curtain-center-ui px-4">
+      <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-ivory/92 backdrop-blur-md border border-champagne/80 shadow-2xl flex flex-col items-center justify-center mb-4">
+        <span class="font-serifEN text-[11px] tracking-[0.25em] text-champagne uppercase mb-0.5">Wedding</span>
+        <div class="font-serifEN text-2xl sm:text-3xl text-charcoal tracking-wider font-semibold">
+          M <span class="text-champagne font-normal italic">&amp;</span> Y
+        </div>
+        <span class="font-serifEN text-[10px] tracking-[0.2em] text-warmGray mt-0.5">2026.12.20</span>
+      </div>
+
+      <!-- 浮動開啟提示 -->
+      <div class="animate-pulse-gentle bg-charcoal/80 backdrop-blur-md text-ivory border border-champagne/60 px-6 py-2.5 rounded-full shadow-xl flex items-center gap-2.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-ping"></span>
+        <span class="text-xs sm:text-sm tracking-[0.18em] font-light">點擊任意位置開啟喜帖</span>
+        <span class="hidden sm:inline text-champagne/90 text-xs font-serifEN italic">/ Tap Anywhere to Open</span>
+      </div>
+
+      <!-- 手機直拿時的貼心橫向觀賞小提醒（僅在直式螢幕 portrait 顯示） -->
+      <div class="portrait:flex landscape:hidden mt-4 items-center gap-1.5 bg-ivory/85 text-charcoal px-3.5 py-1 rounded-full text-[11px] tracking-wider border border-champagne/40 shadow">
+        <span>📱 建議橫向瀏覽，體驗精裝橫式對開視覺</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================================
+       2. 右上角低調「重播開場」按鈕（方便隨時預覽測試左右滑開效果）
+       ===================================================================== -->
+  <button 
+    id="replay-curtain-btn"
+    type="button"
+    title="重新播放左右對開動畫"
+    class="fixed top-4 right-4 z-40 bg-white/85 backdrop-blur-md hover:bg-charcoal text-charcoal hover:text-ivory border border-champagne/50 px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 text-xs tracking-wider transition-all duration-300"
+  >
+    <svg class="w-3.5 h-3.5 text-champagne" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+    </svg>
+    <span>重播開場</span>
+  </button>
+
+
+  <!-- =====================================================================
+       3. 橫式喜帖主版面（Landscape Invitation Layout）
+       寬螢幕與橫屏下呈現「橫式雙欄卡片 + 下方三欄橫向相簿」，一覽核心資訊
+       ===================================================================== -->
+  <main class="main-reveal min-h-screen w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex flex-col justify-center">
+    
+    <!-- 橫式雙欄主卡片 (Main Horizontal Card) -->
+    <article class="bg-white/90 backdrop-blur-md rounded-3xl shadow-[0_18px_50px_-15px_rgba(44,41,38,0.12)] border border-champagne/40 overflow-hidden grid grid-cols-1 md:grid-cols-12">
+      
+      <!-- 【左側欄位（視覺區）】：佔 6 欄 (50%)，橫向大尺寸主婚紗照 -->
+      <div class="md:col-span-6 relative min-h-[260px] sm:min-h-[340px] md:min-h-[520px] bg-sand overflow-hidden group">
+        <!-- 【可替換橫式主視覺圖片】：請將 src 替換為你的橫向主婚紗照 -->
+        <img 
+          src="https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1400&q=85" 
+          alt="明儒與雅雯橫式主視覺婚紗照"
+          class="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-1000"
+          onerror="this.src='https://placehold.co/1200x900/EFECE6/8C734B?text=Main+Landscape+Photo'"
+        />
+        <!-- 底部漸層壓暗，襯托英文標題 -->
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/15 to-transparent"></div>
+        
+        <!-- 內框香檳金細線裝飾 -->
+        <div class="absolute inset-3 sm:inset-4 border border-ivory/40 rounded-2xl pointer-events-none"></div>
+
+        <!-- 左下角英文標題與日期徽章 -->
+        <div class="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 text-ivory">
+          <p class="font-serifEN text-xs sm:text-sm tracking-[0.35em] text-champagne uppercase mb-1">
+            Save The Date
+          </p>
+          <h2 class="font-serifEN text-2xl sm:text-3xl lg:text-4xl tracking-[0.14em] font-semibold leading-tight">
+            WE ARE GETTING MARRIED
+          </h2>
+          <div class="w-12 h-[1px] bg-champagne mt-3"></div>
+        </div>
+      </div>
+
+      <!-- 【右側欄位（邀請內文與功能區）】：佔 6 欄 (50%) -->
+      <div class="md:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-between relative">
+        <!-- 右側內框細線裝飾 -->
+        <div class="hidden sm:block absolute inset-4 border border-champagne/25 rounded-2xl pointer-events-none"></div>
+
+        <div class="relative z-10 text-center md:text-left">
+          <!-- 頂部英文副標 -->
+          <p class="font-serifEN italic text-sm sm:text-base text-warmGray mb-1">
+            Together with their families
+          </p>
+
+          <!-- 【可修改新人姓名】：中文與英文名字 -->
+          <h1 class="font-serifTC text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-[0.16em] text-charcoal mb-1">
+            林明儒 <span class="font-serifEN text-champagne font-normal mx-1">&amp;</span> 陳雅雯
+          </h1>
+          <p class="font-serifEN text-xs sm:text-sm tracking-[0.28em] text-warmGray uppercase mb-4">
+            Ming-Ru &amp; Ya-Wen
+          </p>
+
+          <!-- 誠摯邀請短文 -->
+          <p class="font-serifTC text-xs sm:text-sm leading-relaxed text-warmGray tracking-wider mb-5 pb-5 border-b border-sand">
+            從相遇、相知到相守，我們決定攜手走進人生的下一個篇章。<br class="hidden lg:inline" />
+            誠摯邀請生命中最重要的您，前來共享喜悅與佳餚，見證我們的幸福時刻。
+          </p>
+
+          <!-- 婚禮日期、時間與地點資訊 -->
+          <div class="space-y-3 mb-5 text-left bg-ivory/80 rounded-2xl p-4 border border-champagne/25">
+            <!-- 時間 -->
+            <div class="flex items-start gap-3">
+              <span class="text-champagne mt-0.5 shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
+              <div class="text-xs sm:text-sm">
+                <p class="font-serifTC font-semibold text-charcoal tracking-wider">
+                  2026 年 12 月 20 日（星期日）<span class="text-[11px] font-normal text-warmGray ml-1">農曆十一月十二</span>
+                </p>
+                <p class="text-warmGray mt-0.5">
+                  <span class="text-champagneDark font-medium">11:30</span> 迎賓合影 ｜ <span class="text-champagneDark font-medium">12:00</span> 午宴開席
+                </p>
+              </div>
+            </div>
+
+            <!-- 地點 -->
+            <div class="flex items-start gap-3">
+              <span class="text-champagne mt-0.5 shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+              </span>
+              <div class="text-xs sm:text-sm">
+                <p class="font-serifTC font-semibold text-charcoal tracking-wider">
+                  台北文華東方酒店｜大宴會廳 B2
+                </p>
+                <p class="text-warmGray mt-0.5">
+                  台北市松山區敦化北路 158 號（捷運小巨蛋站步行 7 分鐘）
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 精巧即時婚禮倒數計時器 -->
+          <div aria-label="婚禮倒數計時" class="grid grid-cols-4 gap-2 mb-6">
+            <div class="bg-ivory rounded-xl py-2 px-1 text-center border border-champagne/25">
+              <span id="cd-days" class="font-serifEN text-xl sm:text-2xl font-semibold text-champagne block leading-none">00</span>
+              <span class="text-[10px] tracking-widest text-warmGray mt-1 block">DAYS 天</span>
+            </div>
+            <div class="bg-ivory rounded-xl py-2 px-1 text-center border border-champagne/25">
+              <span id="cd-hours" class="font-serifEN text-xl sm:text-2xl font-semibold text-charcoal block leading-none">00</span>
+              <span class="text-[10px] tracking-widest text-warmGray mt-1 block">HRS 時</span>
+            </div>
+            <div class="bg-ivory rounded-xl py-2 px-1 text-center border border-champagne/25">
+              <span id="cd-mins" class="font-serifEN text-xl sm:text-2xl font-semibold text-charcoal block leading-none">00</span>
+              <span class="text-[10px] tracking-widest text-warmGray mt-1 block">MINS 分</span>
+            </div>
+            <div class="bg-ivory rounded-xl py-2 px-1 text-center border border-champagne/25">
+              <span id="cd-secs" class="font-serifEN text-xl sm:text-2xl font-semibold text-charcoal block leading-none">00</span>
+              <span class="text-[10px] tracking-widest text-warmGray mt-1 block">SECS 秒</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部兩個精緻按鈕：Google Maps 導航 & 填寫出席回覆 RSVP -->
+        <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <a 
+            href="https://www.google.com/maps/search/?api=1&query=台北文華東方酒店" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-ivory hover:bg-sand text-charcoal border border-champagne/60 text-xs sm:text-sm font-medium tracking-wider transition-all duration-300"
+          >
+            <svg class="w-4 h-4 text-champagne" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+            <span>Google Maps 導航</span>
+          </a>
+
+          <button 
+            id="open-rsvp-btn"
+            type="button"
+            class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-champagne hover:bg-champagneDark text-white text-xs sm:text-sm font-medium tracking-wider shadow-sm hover:shadow transition-all duration-300"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+            <span>填寫出席回覆 RSVP</span>
+          </button>
+        </div>
+      </div>
+    </article>
+
+
+    <!-- ===================================================================
+         4. 下方橫向精選相簿列（3 張橫向婚紗照，點擊可放大檢視）
+         =================================================================== -->
+    <section aria-label="橫向精選婚紗相簿" class="mt-6 sm:mt-8">
+      <div class="flex items-center justify-between mb-3 px-1">
+        <div class="flex items-center gap-2.5">
+          <span class="w-6 h-[1px] bg-champagne"></span>
+          <span class="font-serifEN text-xs sm:text-sm tracking-[0.25em] text-champagne uppercase">Our Moments</span>
+          <span class="font-serifTC text-xs text-warmGray">｜點擊照片放大檢視</span>
+        </div>
+        <span class="font-serifEN text-xs text-warmGray hidden sm:inline">Ming-Ru &amp; Ya-Wen</span>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 sm:gap-5">
+        <!-- 【可替換橫向精選相簿圖片 1】：建議使用 16:10 或 3:2 橫向照片 -->
+        <button 
+          type="button"
+          class="gallery-item group relative aspect-[16/10] rounded-2xl overflow-hidden bg-sand border border-champagne/30 shadow-sm focus:outline-none"
+          data-caption="初遇的午後陽光 — 2022"
+        >
+          <img 
+            src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=85" 
+            alt="婚紗橫向剪影 1"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            onerror="this.src='https://placehold.co/800x500/EFECE6/8C734B?text=Landscape+Moment+1'"
+          />
+          <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center">
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-ivory/90 text-charcoal text-[11px] px-3 py-1 rounded-full tracking-wider shadow">
+              放大檢視
+            </span>
+          </div>
+        </button>
+
+        <!-- 【可替換橫向精選相簿圖片 2】：建議使用 16:10 或 3:2 橫向照片 -->
+        <button 
+          type="button"
+          class="gallery-item group relative aspect-[16/10] rounded-2xl overflow-hidden bg-sand border border-champagne/30 shadow-sm focus:outline-none"
+          data-caption="攜手走過四季風景 — 2024"
+        >
+          <img 
+            src="https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=1000&q=85" 
+            alt="婚紗橫向剪影 2"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            onerror="this.src='https://placehold.co/800x500/E8E2D7/8C734B?text=Landscape+Moment+2'"
+          />
+          <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center">
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-ivory/90 text-charcoal text-[11px] px-3 py-1 rounded-full tracking-wider shadow">
+              放大檢視
+            </span>
+          </div>
+        </button>
+
+        <!-- 【可替換橫向精選相簿圖片 3】：建議使用 16:10 或 3:2 橫向照片 -->
+        <button 
+          type="button"
+          class="gallery-item group relative aspect-[16/10] rounded-2xl overflow-hidden bg-sand border border-champagne/30 shadow-sm focus:outline-none"
+          data-caption="許下共度餘生的約定 — 2026"
+        >
+          <img 
+            src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1000&q=85" 
+            alt="婚紗橫向剪影 3"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            onerror="this.src='https://placehold.co/800x500/EFECE6/8C734B?text=Landscape+Moment+3'"
+          />
+          <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center">
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-ivory/90 text-charcoal text-[11px] px-3 py-1 rounded-full tracking-wider shadow">
+              放大檢視
+            </span>
+          </div>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================================
+       5. 相簿放大檢視燈箱 (Lightbox Modal)
+       ===================================================================== -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-8 bg-charcoal/85 backdrop-blur-md">
+    <button id="close-lightbox-btn" type="button" aria-label="關閉預覽" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-ivory/15 hover:bg-ivory/30 text-ivory flex items-center justify-center text-lg transition-colors">
+      ✕
+    </button>
+    <div class="max-w-4xl w-full flex flex-col items-center">
+      <img id="lightbox-img" src="" alt="放大預覽" class="max-h-[78vh] w-auto rounded-2xl shadow-2xl border border-champagne/40 object-contain" />
+      <p id="lightbox-caption" class="font-serifTC text-ivory/90 text-sm tracking-widest mt-4"></p>
+    </div>
+  </div>
+
+
+  <!-- =====================================================================
+       6. 出席回覆 RSVP 彈窗 Modal
+       ===================================================================== -->
+  <div id="rsvp-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-charcoal/55 backdrop-blur-sm">
+    <div class="bg-ivory w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-champagne/40 relative">
+      <button id="close-rsvp-btn" type="button" aria-label="關閉視窗" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-sand flex items-center justify-center text-warmGray hover:text-charcoal">
+        ✕
+      </button>
+
+      <div id="rsvp-form-container">
+        <span class="font-serifEN text-xs tracking-[0.25em] text-champagne uppercase">R.S.V.P.</span>
+        <h3 class="font-serifTC text-xl font-semibold text-charcoal mt-1 mb-4">婚禮出席回覆</h3>
+
+        <form id="rsvp-form" class="space-y-3.5 text-left">
+          <div>
+            <label class="block text-xs font-medium text-charcoal mb-1">賓客姓名 *</label>
+            <input type="text" required placeholder="請輸入您的姓名" class="w-full px-4 py-2.5 rounded-xl bg-white border border-champagne/35 text-sm focus:outline-none focus:border-champagne" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-charcoal mb-1">出席人數 *</label>
+              <select class="w-full px-3 py-2.5 rounded-xl bg-white border border-champagne/35 text-sm focus:outline-none focus:border-champagne">
+                <option value="1">1 位大人</option>
+                <option value="2">2 位大人</option>
+                <option value="3">3 位</option>
+                <option value="4">4 位</option>
+                <option value="0">不克出席（獻上祝福）</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-charcoal mb-1">素食需求</label>
+              <select class="w-full px-3 py-2.5 rounded-xl bg-white border border-champagne/35 text-sm focus:outline-none focus:border-champagne">
+                <option value="0">無需素食（全葷）</option>
+                <option value="1">1 份素食套餐</option>
+                <option value="2">2 份素食套餐</option>
+                <option value="all">皆為素食</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-charcoal mb-1">給新人的祝福留言</label>
+            <textarea rows="2" placeholder="寫下想對明儒與雅雯說的祝福..." class="w-full px-4 py-2 rounded-xl bg-white border border-champagne/35 text-sm focus:outline-none focus:border-champagne"></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-champagne hover:bg-champagneDark text-white text-sm font-medium tracking-widest transition-colors mt-1 shadow-sm">
+            送出出席回覆
+          </button>
+        </form>
+      </div>
+
+      <!-- 送出成功訊息 -->
+      <div id="rsvp-success" class="hidden text-center py-6">
+        <div class="w-12 h-12 rounded-full bg-champagne/15 text-champagne flex items-center justify-center mx-auto mb-3 text-xl">
+          ✓
+        </div>
+        <h4 class="font-serifTC text-lg font-semibold text-charcoal mb-2">感謝您的回覆！</h4>
+        <p class="text-sm text-warmGray mb-5">我們已收到您的出席資訊，期待婚禮當天與您相見。</p>
+        <button id="done-rsvp-btn" type="button" class="px-6 py-2 rounded-full bg-charcoal text-ivory text-xs tracking-widest">
+          返回喜帖
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================================
+       7. 互動腳本 (JavaScript)
+       ===================================================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const curtainOverlay = document.getElementById('curtain-overlay');
+      const replayBtn = document.getElementById('replay-curtain-btn');
+      let isOpened = false;
+      let hideTimeout = null;
+
+      /**
+       * 點擊任意位置開啟左右對開簾幕 (1.1s 動畫)
+       */
+      function openCurtain() {
+        if (isOpened) return;
+        isOpened = true;
+
+        curtainOverlay.classList.add('opened');
+        document.body.classList.add('invitation-revealed');
+
+        // 動畫時間 1.1s 結束後隱藏簾幕層，確保下方按鈕與相簿可順暢互動
+        hideTimeout = setTimeout(() => {
+          curtainOverlay.style.display = 'none';
+        }, 1100);
+      }
+
+      /**
+       * 重播開場左右對開動畫
+       */
+      function resetCurtain() {
+        clearTimeout(hideTimeout);
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        
+        curtainOverlay.style.display = 'flex';
+        document.body.classList.remove('invitation-revealed');
+        
+        void curtainOverlay.offsetWidth; // 強制瀏覽器重繪
+        curtainOverlay.classList.remove('opened');
+        isOpened = false;
+      }
+
+      curtainOverlay.addEventListener('click', openCurtain);
+      curtainOverlay.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openCurtain();
+        }
+      });
+      replayBtn.addEventListener('click', resetCurtain);
+
+      /* ============================================================
+         即時婚禮倒數計時器
+         【可修改婚禮目標時間】：YYYY-MM-DDTHH:mm:ss
+         ============================================================ */
+      const weddingDate = new Date('2026-12-20T12:00:00').getTime();
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = weddingDate - now;
+
+        const daysEl = document.getElementById('cd-days');
+        const hoursEl = document.getElementById('cd-hours');
+        const minsEl = document.getElementById('cd-mins');
+        const secsEl = document.getElementById('cd-secs');
+
+        if (distance <= 0) {
+          daysEl.textContent = hoursEl.textContent = minsEl.textContent = secsEl.textContent = '00';
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        daysEl.textContent = String(days).padStart(2, '0');
+        hoursEl.textContent = String(hours).padStart(2, '0');
+        minsEl.textContent = String(minutes).padStart(2, '0');
+        secsEl.textContent = String(seconds).padStart(2, '0');
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      /* ============================================================
+         下方橫向相簿點擊放大檢視 (Lightbox)
+         ============================================================ */
+      const lightboxModal = document.getElementById('lightbox-modal');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const closeLightboxBtn = document.getElementById('close-lightbox-btn');
+      const galleryItems = document.querySelectorAll('.gallery-item');
+
+      galleryItems.forEach((item) => {
+        item.addEventListener('click', () => {
+          const img = item.querySelector('img');
+          lightboxImg.src = img.src;
+          lightboxCaption.textContent = item.dataset.caption || '';
+          lightboxModal.classList.remove('hidden');
+          lightboxModal.classList.add('flex');
+        });
+      });
+
+      function closeLightbox() {
+        lightboxModal.classList.add('hidden');
+        lightboxModal.classList.remove('flex');
+      }
+
+      closeLightboxBtn.addEventListener('click', closeLightbox);
+      lightboxModal.addEventListener('click', (e) => {
+        if (e.target === lightboxModal) closeLightbox();
+      });
+
+      /* ============================================================
+         RSVP 出席回覆彈窗互動
+         ============================================================ */
+      const rsvpModal = document.getElementById('rsvp-modal');
+      const openRsvpBtn = document.getElementById('open-rsvp-btn');
+      const closeRsvpBtn = document.getElementById('close-rsvp-btn');
+      const doneRsvpBtn = document.getElementById('done-rsvp-btn');
+      const rsvpForm = document.getElementById('rsvp-form');
+      const rsvpFormContainer = document.getElementById('rsvp-form-container');
+      const rsvpSuccess = document.getElementById('rsvp-success');
+
+      function openModal() {
+        rsvpFormContainer.classList.remove('hidden');
+        rsvpSuccess.classList.add('hidden');
+        rsvpModal.classList.remove('hidden');
+        rsvpModal.classList.add('flex');
+      }
+
+      function closeModal() {
+        rsvpModal.classList.add('hidden');
+        rsvpModal.classList.remove('flex');
+      }
+
+      openRsvpBtn.addEventListener('click', openModal);
+      closeRsvpBtn.addEventListener('click', closeModal);
+      doneRsvpBtn.addEventListener('click', closeModal);
+      rsvpModal.addEventListener('click', (e) => {
+        if (e.target === rsvpModal) closeModal();
+      });
+
+      rsvpForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        rsvpFormContainer.classList.add('hidden');
+        rsvpSuccess.classList.remove('hidden');
+        rsvpForm.reset();
+      });
+    });
+  </script>
+</body>
+</html>
