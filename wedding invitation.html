@@ -155,19 +155,45 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* ============================================================
+       [背景音樂控制模組樣式] 黑膠旋轉動畫
+       ============================================================ */
+    .vinyl-disc {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #C5A059 0 28%, #2C2C2C 32% 100%);
+      flex-shrink: 0;
+    }
+
+    #music-toggle-btn.is-playing .vinyl-disc {
+      animation: spinVinyl 4s linear infinite;
+    }
+
+    @keyframes spinVinyl {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body class="font-sansTC antialiased selection:bg-champagne/20 selection:text-charcoal">
 
   <!-- =====================================================================
+       【背景音樂音源】：若你有準備自己的 MP3 音樂檔，請將網址填入 src="" 中
+       （若 src 留空或載入失敗，系統會自動播放內建的浪漫鋼琴八音盒旋律）
+       ===================================================================== -->
+  <audio id="bgm-audio" src="" loop preload="auto"></audio>
+
+
+  <!-- =====================================================================
        1. 開場互動遮罩（橫式左右對開照片簾幕）
-       點擊螢幕任意位置，左側向左滑出、右側向右滑出 (1.1s)
+       點擊螢幕任意位置，左側向左滑出、右側向右滑出 (1.1s) 並啟動音樂
        ===================================================================== -->
   <div id="curtain-overlay" role="button" tabindex="0" aria-label="點擊任意位置開啟電子喜帖">
     
     <!-- 左側照片區塊 (50vw x 100vh) -->
     <div class="curtain-panel curtain-left">
-      <!-- 【可替換橫式開場左側照片】：建議使用橫向或寬幅婚紗照 -->
       <img 
         src="https://neil1217.github.io/wedding%20invitation/0left.jpg" 
         alt="婚紗照左側"
@@ -177,7 +203,6 @@
 
     <!-- 右側照片區塊 (50vw x 100vh) -->
     <div class="curtain-panel curtain-right">
-      <!-- 【可替換橫式開場右側照片】：建議使用橫向或寬幅婚紗照 -->
       <img 
         src="https://neil1217.github.io/wedding%20invitation/0right.jpg" 
         alt="婚紗照右側"
@@ -204,34 +229,43 @@
         <span class="text-xs sm:text-sm tracking-[0.18em] font-light">點擊任意位置開啟喜帖</span>
         <span class="hidden sm:inline text-champagne/90 text-xs font-serifEN italic">/ Tap Anywhere to Open</span>
       </div>
-
-      <!-- 手機直拿時的貼心橫向觀賞小提醒（僅在直式螢幕 portrait 顯示） -->
-      <!--<div class="portrait:flex landscape:hidden mt-4 items-center gap-1.5 bg-ivory/85 text-charcoal px-3.5 py-1 rounded-full text-[11px] tracking-wider border border-champagne/40 shadow">
-        <span>📱 建議橫向瀏覽，體驗精裝橫式對開視覺</span>
-      </div>-->
     </div>
   </div>
 
 
   <!-- =====================================================================
-       2. 右上角低調「重播開場」按鈕（方便隨時預覽測試左右滑開效果）
+       2. 右上角懸浮控制列：「背景音樂開關」＋「重播開場」按鈕
        ===================================================================== -->
-  <button 
-    id="replay-curtain-btn"
-    type="button"
-    title="重新播放左右對開動畫"
-    class="fixed top-4 right-4 z-40 bg-white/85 backdrop-blur-md hover:bg-charcoal text-charcoal hover:text-ivory border border-champagne/50 px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 text-xs tracking-wider transition-all duration-300"
-  >
-    <svg class="w-3.5 h-3.5 text-champagne" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-    </svg>
-    <span>重播開場</span>
-  </button>
+  <div class="fixed top-4 right-4 z-40 flex items-center gap-2">
+    <!-- 背景音樂開關按鈕 -->
+    <button 
+      id="music-toggle-btn"
+      type="button"
+      title="切換背景音樂"
+      aria-label="切換背景音樂"
+      class="bg-white/85 backdrop-blur-md hover:bg-charcoal text-charcoal hover:text-ivory border border-champagne/50 px-3.5 py-2 rounded-full shadow-sm flex items-center gap-2 text-xs tracking-wider transition-all duration-300"
+    >
+      <span class="vinyl-disc" aria-hidden="true"></span>
+      <span id="music-status-label">音樂：關閉</span>
+    </button>
+
+    <!-- 重播開場按鈕 -->
+    <button 
+      id="replay-curtain-btn"
+      type="button"
+      title="重新播放左右對開動畫"
+      class="bg-white/85 backdrop-blur-md hover:bg-charcoal text-charcoal hover:text-ivory border border-champagne/50 px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 text-xs tracking-wider transition-all duration-300"
+    >
+      <svg class="w-3.5 h-3.5 text-champagne" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+      </svg>
+      <span>重播開場</span>
+    </button>
+  </div>
 
 
   <!-- =====================================================================
        3. 橫式喜帖主版面（Landscape Invitation Layout）
-       寬螢幕與橫屏下呈現「橫式雙欄卡片 + 下方三欄橫向相簿」，一覽核心資訊
        ===================================================================== -->
   <main class="main-reveal min-h-screen w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex flex-col justify-center">
     
@@ -240,7 +274,6 @@
       
       <!-- 【左側欄位（視覺區）】：佔 6 欄 (50%)，橫向大尺寸主婚紗照 -->
       <div class="md:col-span-6 relative min-h-[260px] sm:min-h-[340px] md:min-h-[520px] bg-sand overflow-hidden group">
-        <!-- 【可替換橫式主視覺圖片】：請將 src 替換為你的橫向主婚紗照 -->
         <img 
           src="https://neil1217.github.io/wedding%20invitation/indexTop.jpg" 
           alt="明儒與雅雯橫式主視覺婚紗照"
@@ -275,7 +308,7 @@
             Together with their families
           </p>
 
-          <!-- 【可修改新人姓名】：中文與英文名字 -->
+          <!-- 中文與英文名字 -->
           <h1 class="font-serifTC text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-[0.16em] text-charcoal mb-1">
             葉明儒 <span class="font-serifEN text-champagne font-normal mx-1">&amp;</span> 陳雅雯
           </h1>
@@ -348,8 +381,8 @@
           </div>
         </div>
 
-        <!-- 底部兩個精緻按鈕：Google Maps 導航 & 填寫出席回覆 RSVP -->
-        <div class="relative z-10 grid grid-cols-1  gap-3">
+        <!-- 底部按鈕：Google Maps 導航 -->
+        <div class="relative z-10 grid grid-cols-1 gap-3">
           <a 
             href="https://maps.app.goo.gl/bTb8C8yuodaZm7M29" 
             target="_blank" 
@@ -380,7 +413,6 @@
       </div>
 
       <div class="grid grid-cols-3 gap-3 sm:gap-5">
-        <!-- 【可替換橫向精選相簿圖片 1】：建議使用 16:10 或 3:2 橫向照片 -->
         <button 
           type="button"
           class="gallery-item group relative aspect-[16/10] rounded-2xl overflow-hidden bg-sand border border-champagne/30 shadow-sm focus:outline-none"
@@ -390,7 +422,6 @@
             src="https://neil1217.github.io/wedding%20invitation/02left.jpg" 
             alt="婚紗1"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          
           />
           <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center">
             <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-ivory/90 text-charcoal text-[11px] px-3 py-1 rounded-full tracking-wider shadow">
@@ -399,7 +430,6 @@
           </div>
         </button>
 
-        <!-- 【可替換橫向精選相簿圖片 2】：建議使用 16:10 或 3:2 橫向照片 -->
         <button 
           type="button"
           class="gallery-item group relative aspect-[16/10] rounded-2xl overflow-hidden bg-sand border border-champagne/30 shadow-sm focus:outline-none"
@@ -417,7 +447,6 @@
           </div>
         </button>
 
-        <!-- 【可替換橫向精選相簿圖片 3】：建議使用 16:10 或 3:2 橫向照片 -->
         <button 
           type="button"
           class="gallery-item group relative aspect-[16/10] rounded-2xl overflow-hidden bg-sand border border-champagne/30 shadow-sm focus:outline-none"
@@ -522,34 +551,155 @@
 
 
   <!-- =====================================================================
-       7. 互動腳本 (JavaScript)
+       7. 互動腳本 (JavaScript) - 含背景音樂模組
        ===================================================================== -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      /* ============================================================
+         背景音樂模組（支援自訂 MP3 淡入播放 ＋ 內建鋼琴八音盒備援旋律）
+         ============================================================ */
+      const bgmAudio = document.getElementById('bgm-audio');
+      const musicToggleBtn = document.getElementById('music-toggle-btn');
+      const musicStatusLabel = document.getElementById('music-status-label');
+
+      let isMusicPlaying = false;
+      let fadeTimer = null;
+      let audioCtx = null;
+      let melodyTimer = null;
+
+      function updateMusicUI(playing) {
+        isMusicPlaying = playing;
+        musicToggleBtn.classList.toggle('is-playing', playing);
+        musicStatusLabel.textContent = playing ? '音樂：播放中' : '音樂：關閉';
+      }
+
+      // 音量柔和淡入（針對 MP3 音檔）
+      function fadeInAudio(targetVolume = 0.65, durationMs = 1200) {
+        clearInterval(fadeTimer);
+        bgmAudio.volume = 0;
+        const steps = 24;
+        const stepTime = durationMs / steps;
+        const delta = targetVolume / steps;
+
+        fadeTimer = setInterval(() => {
+          if (bgmAudio.volume + delta >= targetVolume) {
+            bgmAudio.volume = targetVolume;
+            clearInterval(fadeTimer);
+          } else {
+            bgmAudio.volume += delta;
+          }
+        }, stepTime);
+      }
+
+      // 備援旋律：若未設定 MP3 路徑，自動播放浪漫鋼琴八音盒分解和弦
+      function startMusicBoxSynth() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        if (!audioCtx) {
+          audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        // 溫柔卡農風格音階頻率
+        const notes = [
+          659.25, 587.33, 523.25, 493.88,
+          440.00, 392.00, 440.00, 493.88,
+          523.25, 659.25, 783.99, 659.25,
+          587.33, 698.46, 659.25, 587.33
+        ];
+        let noteIndex = 0;
+
+        clearInterval(melodyTimer);
+        melodyTimer = setInterval(() => {
+          if (!isMusicPlaying || !audioCtx) return;
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(notes[noteIndex % notes.length], now);
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.038, now + 0.06);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.25);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 1.3);
+          noteIndex++;
+        }, 620);
+      }
+
+      function stopMusicBoxSynth() {
+        clearInterval(melodyTimer);
+        melodyTimer = null;
+      }
+
+      async function startBackgroundMusic() {
+        if (isMusicPlaying) return;
+
+        const hasCustomSrc = Boolean(bgmAudio && bgmAudio.getAttribute('src'));
+        if (hasCustomSrc) {
+          try {
+            await bgmAudio.play();
+            fadeInAudio(0.65, 1200);
+            updateMusicUI(true);
+            return;
+          } catch (err) {
+            console.warn('自訂 MP3 無法播放，已自動切換為內建旋律：', err);
+          }
+        }
+
+        startMusicBoxSynth();
+        updateMusicUI(true);
+      }
+
+      function pauseBackgroundMusic() {
+        clearInterval(fadeTimer);
+        if (bgmAudio && !bgmAudio.paused) {
+          bgmAudio.pause();
+        }
+        stopMusicBoxSynth();
+        updateMusicUI(false);
+      }
+
+      musicToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isMusicPlaying) {
+          pauseBackgroundMusic();
+        } else {
+          startBackgroundMusic();
+        }
+      });
+
+      /* ============================================================
+         開場左右對開照片簾幕互動
+         ============================================================ */
       const curtainOverlay = document.getElementById('curtain-overlay');
       const replayBtn = document.getElementById('replay-curtain-btn');
       let isOpened = false;
       let hideTimeout = null;
 
-      /**
-       * 點擊任意位置開啟左右對開簾幕 (1.1s 動畫)
-       */
       function openCurtain() {
         if (isOpened) return;
         isOpened = true;
 
+        // 點擊開啟喜帖的同時啟動背景音樂
+        startBackgroundMusic();
+
         curtainOverlay.classList.add('opened');
         document.body.classList.add('invitation-revealed');
 
-        // 動畫時間 1.1s 結束後隱藏簾幕層，確保下方按鈕與相簿可順暢互動
         hideTimeout = setTimeout(() => {
           curtainOverlay.style.display = 'none';
         }, 1100);
       }
 
-      /**
-       * 重播開場左右對開動畫
-       */
       function resetCurtain() {
         clearTimeout(hideTimeout);
         window.scrollTo({ top: 0, behavior: 'instant' });
@@ -557,7 +707,7 @@
         curtainOverlay.style.display = 'flex';
         document.body.classList.remove('invitation-revealed');
         
-        void curtainOverlay.offsetWidth; // 強制瀏覽器重繪
+        void curtainOverlay.offsetWidth;
         curtainOverlay.classList.remove('opened');
         isOpened = false;
       }
@@ -573,9 +723,8 @@
 
       /* ============================================================
          即時婚禮倒數計時器
-         【可修改婚禮目標時間】：YYYY-MM-DDTHH:mm:ss
          ============================================================ */
-      const weddingDate = new Date('2026-12-20T12:00:00').getTime();
+      const weddingDate = new Date('2026-12-26T12:00:00').getTime();
 
       function updateCountdown() {
         const now = new Date().getTime();
@@ -635,7 +784,7 @@
       });
 
       /* ============================================================
-         RSVP 出席回覆彈窗互動
+         RSVP 出席回覆彈窗互動（保留安全判斷避免按鈕移除時報錯）
          ============================================================ */
       const rsvpModal = document.getElementById('rsvp-modal');
       const openRsvpBtn = document.getElementById('open-rsvp-btn');
@@ -657,19 +806,23 @@
         rsvpModal.classList.remove('flex');
       }
 
-      openRsvpBtn.addEventListener('click', openModal);
-      closeRsvpBtn.addEventListener('click', closeModal);
-      doneRsvpBtn.addEventListener('click', closeModal);
-      rsvpModal.addEventListener('click', (e) => {
-        if (e.target === rsvpModal) closeModal();
-      });
+      if (openRsvpBtn) openRsvpBtn.addEventListener('click', openModal);
+      if (closeRsvpBtn) closeRsvpBtn.addEventListener('click', closeModal);
+      if (doneRsvpBtn) doneRsvpBtn.addEventListener('click', closeModal);
+      if (rsvpModal) {
+        rsvpModal.addEventListener('click', (e) => {
+          if (e.target === rsvpModal) closeModal();
+        });
+      }
 
-      rsvpForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        rsvpFormContainer.classList.add('hidden');
-        rsvpSuccess.classList.remove('hidden');
-        rsvpForm.reset();
-      });
+      if (rsvpForm) {
+        rsvpForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          rsvpFormContainer.classList.add('hidden');
+          rsvpSuccess.classList.remove('hidden');
+          rsvpForm.reset();
+        });
+      }
     });
   </script>
 </body>
